@@ -206,7 +206,7 @@ async function initDatabase() {
 // Jalankan inisialisasi database sebelum server di-listen
 initDatabase().then(() => {
   // Mount Router API
-  const apiRouter = require('./routes/api');
+  const apiRouter = require('./routes');
   app.use('/api', apiRouter);
 
   // Tes Route Utama
