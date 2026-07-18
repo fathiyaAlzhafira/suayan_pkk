@@ -32,7 +32,8 @@ function Navbar({ currentTab, setCurrentTab, setActiveDataMenu, isAdmin, setIsAd
               { id: 'profil', label: 'Profil PKK' },
               { id: 'data_publik', label: 'Data & Informasi', menu: 'ekspedisi' },
               { id: 'kegiatan', label: 'Kegiatan' },
-              { id: 'keuangan', label: 'Transparansi Keuangan' }
+              { id: 'keuangan', label: 'Transparansi Keuangan' },
+              { id: 'portal_warga', label: 'Portal Warga' }
             ].map(tab => (
               <button
                 key={tab.id}
@@ -86,7 +87,8 @@ function Navbar({ currentTab, setCurrentTab, setActiveDataMenu, isAdmin, setIsAd
             { id: 'profil', label: 'Profil PKK' },
             { id: 'data_publik', label: 'Data & Informasi', menu: 'ekspedisi' },
             { id: 'kegiatan', label: 'Kegiatan' },
-            { id: 'keuangan', label: 'Transparansi Keuangan' }
+            { id: 'keuangan', label: 'Transparansi Keuangan' },
+            { id: 'portal_warga', label: 'Portal Warga' }
           ].map(tab => (
             <button
               key={tab.id}

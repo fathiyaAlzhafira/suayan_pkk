@@ -47,7 +47,11 @@ CREATE TABLE IF NOT EXISTS keluarga (
     no_kk VARCHAR(16) PRIMARY KEY,
     id_jorong INT NOT NULL,
     dasawisma VARCHAR(100) NOT NULL,
+    rt VARCHAR(10) NULL,
+    rw VARCHAR(10) NULL,
+    dusun VARCHAR(100) NULL,
     makanan_pokok VARCHAR(50) DEFAULT 'Beras', -- Beras, Non Beras
+    makanan_pokok_lain VARCHAR(100) NULL,
     jamban_keluarga BOOLEAN DEFAULT FALSE,
     jumlah_jamban INT DEFAULT 0,
     sumber_air VARCHAR(50) DEFAULT 'PDAM', -- PDAM, Sumur, Sungai, Lainnya
@@ -55,6 +59,9 @@ CREATE TABLE IF NOT EXISTS keluarga (
     spal BOOLEAN DEFAULT FALSE, -- Saluran Pembuangan Air Limbah
     stiker_p4k BOOLEAN DEFAULT FALSE,
     kriteria_rumah VARCHAR(50) DEFAULT 'Sehat', -- Sehat, Kurang Sehat
+    up2k_aktif BOOLEAN DEFAULT FALSE,
+    up2k_jenis VARCHAR(150) NULL,
+    kesling_aktif BOOLEAN DEFAULT FALSE,
     status_verifikasi VARCHAR(50) DEFAULT 'Approved', -- Pending, Approved, Rejected
     FOREIGN KEY (id_jorong) REFERENCES jorong(id_jorong) ON DELETE CASCADE
 );

@@ -11,6 +11,7 @@ router.delete('/warga/:nik', wargaCont.deleteWarga);
 router.get('/anggota', wargaCont.getWarga);
 router.post('/anggota', wargaCont.addWarga);
 router.put('/anggota/:nik', wargaCont.updateWarga);
-router.delete('/anggota/:nik', wargaCont.deleteWarga);
+router.post('/warga/verify', wargaCont.verifyKeluarga);
+router.post('/warga/submit-mandiri', wargaCont.submitMandiriKeluargaWarga);
 
 module.exports = router;

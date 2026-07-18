@@ -8,6 +8,7 @@ import KegiatanView from './KegiatanView';
 import KeuanganView from './KeuanganView';
 import AdminLoginModal from '../components/AdminLoginModal';
 import AdminDashboardView from './AdminDashboardView';
+import PortalWargaView from './PortalWargaView';
 
 // --- DATA TIRUAN AWAL (NAGARI SUAYAN) ---
 const initialEkspedisi = [
@@ -389,8 +390,10 @@ function MainLayout() {
             setDataPokja3={setDataPokja3}
             dataPokja4={dataPokja4}
             setDataPokja4={setDataPokja4}
-            dataPosyandu={dataPosyandu}
           />
+        )}
+        {currentTab === 'portal_warga' && (
+          <PortalWargaView API_URL={API_URL} />
         )}
       </main>
 

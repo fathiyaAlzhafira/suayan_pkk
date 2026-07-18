@@ -3,6 +3,8 @@
 @theme {
   --font-sans: 'Plus Jakarta Sans', sans-serif;
   --font-serif: 'Playfair Display', serif;
+  --color-emerald-850: #064e3b;
+  --color-emerald-750: #0f766e;
 }
 
 /* Tambahan custom styling halus jika diperlukan */
