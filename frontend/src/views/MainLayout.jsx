@@ -128,14 +128,15 @@ function MainLayout() {
           const rows = await resPokja1.json();
           if (rows.length > 0) {
             setDataPokja1(rows.map(r => ({
+              ...r,
               jorong: r.jorong,
-              pkbn_kel: r.pkbn_simulasi_kelompok,
-              pkbn_ang: r.pkbn_simulasi_anggota,
-              pkdrt_kel: r.pkdrt_simulasi_kelompok,
-              pola_kel: r.pola_asuh_simulasi_kelompok,
-              lansia_kel: r.lansia_kelompok,
-              gotong: r.kerja_bakti,
-              arisan: r.arisan
+              pkbn_kel: r.simulasi_pkbn_jml_kelompok,
+              pkbn_ang: r.simulasi_pkbn_jml_anggota,
+              pkdrt_kel: r.simulasi_pkdrt_jml_kelompok,
+              pola_kel: r.simulasi_pola_asuh_jml_kelompok,
+              lansia_kel: r.kader_lansia,
+              gotong: r.gotong_royong_kerja_bakti_jml_anggota,
+              arisan: r.gotong_royong_arisan
             })));
           }
         }
@@ -145,13 +146,14 @@ function MainLayout() {
           const rows = await resPokja2.json();
           if (rows.length > 0) {
             setDataPokja2(rows.map(r => ({
+              ...r,
               jorong: r.jorong,
-              baca: r.taman_bacaan,
+              baca: r.taman_bacaan_perpustakaan_kelompok_pembaca,
               up2k_kel: r.up2k_pemula_kelompok,
               up2k_pes: r.up2k_pemula_peserta,
               mikro: r.usaha_mikro,
               toko: r.toko_pkk,
-              koperasi: r.koperasi_hukum_jumlah
+              koperasi: r.koperasi_berbadan_hukum_jumlah
             })));
           }
         }
@@ -161,13 +163,14 @@ function MainLayout() {
           const rows = await resPokja3.json();
           if (rows.length > 0) {
             setDataPokja3(rows.map(r => ({
+              ...r,
               jorong: r.jorong,
               kp: r.kader_pangan,
               ks: r.kader_sandang,
-              ternak: r.pekarangan_peternakan,
-              ikan: r.pekarangan_perikanan,
-              warung: r.pekarangan_warung_hidup,
-              toga: r.pekarangan_toga,
+              ternak: r.pekarangan_hatinya_pkk_peternakan,
+              ikan: r.pekarangan_hatinya_pkk_perikanan,
+              warung: r.pekarangan_hatinya_pkk_warung_hidup,
+              toga: r.pekarangan_hatinya_pkk_toga,
               r_sehat: r.rumah_sehat,
               r_kurang: r.rumah_kurang_sehat
             })));
@@ -179,14 +182,15 @@ function MainLayout() {
           const rows = await resPokja4.json();
           if (rows.length > 0) {
             setDataPokja4(rows.map(r => ({
+              ...r,
               jorong: r.jorong,
-              k_pos: r.kader_posyandu,
+              k_pos: r.kader_kesehatan,
               k_phbs: r.kader_phbs,
               k_kb: r.kader_kb,
-              pos: r.jumlah_posyandu,
-              jamban: r.memiliki_kartu_jamban,
-              mck: r.memiliki_mck,
-              kb_asep: r.aseptor_kb_p
+              pos: r.posyandu_total,
+              jamban: r.jamban,
+              mck: r.tempat_sampah,
+              kb_asep: r.warga_gratis
             })));
           }
         }

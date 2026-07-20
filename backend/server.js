@@ -67,8 +67,9 @@ async function initDatabase() {
     }
 
     // 5. [NEW TABLE] Buat tabel buku_posyandu
+    await connection.query('DROP TABLE IF EXISTS buku_posyandu');
     await connection.query(`
-      CREATE TABLE IF NOT EXISTS buku_posyandu (
+      CREATE TABLE buku_posyandu (
         id INT AUTO_INCREMENT PRIMARY KEY,
         jorong VARCHAR(100) NOT NULL,
         posyandu VARCHAR(150) NOT NULL,
@@ -85,6 +86,43 @@ async function initDatabase() {
         polio INT DEFAULT 0,
         campak INT DEFAULT 0,
         hepb INT DEFAULT 0,
+        
+        -- New detailed fields
+        balita_0_12_l_baru INT DEFAULT 0,
+        balita_0_12_l_lama INT DEFAULT 0,
+        balita_0_12_p_baru INT DEFAULT 0,
+        balita_0_12_p_lama INT DEFAULT 0,
+        balita_1_5_l_baru INT DEFAULT 0,
+        balita_1_5_l_lama INT DEFAULT 0,
+        balita_1_5_p_baru INT DEFAULT 0,
+        balita_1_5_p_lama INT DEFAULT 0,
+        wus_hadir INT DEFAULT 0,
+        pus_hadir INT DEFAULT 0,
+        bumil_hadir INT DEFAULT 0,
+        busui_hadir INT DEFAULT 0,
+        petugas_kader_l INT DEFAULT 0,
+        petugas_kader_p INT DEFAULT 0,
+        petugas_plkb_l INT DEFAULT 0,
+        petugas_plkb_p INT DEFAULT 0,
+        petugas_medis_l INT DEFAULT 0,
+        petugas_medis_p INT DEFAULT 0,
+        bayi_lahir_l INT DEFAULT 0,
+        bayi_lahir_p INT DEFAULT 0,
+        bayi_meninggal_l INT DEFAULT 0,
+        bayi_meninggal_p INT DEFAULT 0,
+        balita_meninggal INT DEFAULT 0,
+        vit_a INT DEFAULT 0,
+        pmt INT DEFAULT 0,
+        bumil_tt INT DEFAULT 0,
+        dpt_1 INT DEFAULT 0,
+        dpt_2 INT DEFAULT 0,
+        dpt_3 INT DEFAULT 0,
+        polio_1 INT DEFAULT 0,
+        polio_2 INT DEFAULT 0,
+        polio_3 INT DEFAULT 0,
+        polio_4 INT DEFAULT 0,
+        diare_oralit INT DEFAULT 0,
+        
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `);
@@ -95,10 +133,10 @@ async function initDatabase() {
     if (posyanduCount[0].count === 0) {
       console.log('Melakukan seeding data awal Posyandu...');
       await connection.query(`
-        INSERT INTO buku_posyandu (id, jorong, posyandu, pengunjung, petugas, bayi_lahir, meninggal, s, k, d, n, bcg, dpt, polio, campak, hepb) VALUES 
-        (1, 'Suayan Tinggi', 'Posyandu Mawar', 47, 5, 2, 0, 47, 45, 43, 38, 2, 5, 5, 3, 2),
-        (2, 'Suayan Sabar', 'Posyandu Melati', 52, 5, 3, 0, 52, 50, 48, 42, 3, 6, 6, 4, 3),
-        (3, 'Suayan Randah', 'Posyandu Anggrek', 35, 4, 1, 0, 35, 34, 32, 28, 1, 3, 3, 2, 1)
+        INSERT INTO buku_posyandu (id, jorong, posyandu, pengunjung, petugas, bayi_lahir, meninggal, s, k, d, n, bcg, dpt, polio, campak, hepb, balita_0_12_l_baru, balita_0_12_l_lama, wus_hadir, pus_hadir, bumil_hadir, busui_hadir, vit_a, pmt, diare_oralit) VALUES 
+        (1, 'Suayan Tinggi', 'Posyandu Mawar', 47, 5, 2, 0, 47, 45, 43, 38, 2, 5, 5, 3, 2, 5, 10, 12, 15, 8, 10, 40, 42, 2),
+        (2, 'Suayan Sabar', 'Posyandu Melati', 52, 5, 3, 0, 52, 50, 48, 42, 3, 6, 6, 4, 3, 6, 12, 14, 18, 10, 12, 45, 48, 1),
+        (3, 'Suayan Randah', 'Posyandu Anggrek', 35, 4, 1, 0, 35, 34, 32, 28, 1, 3, 3, 2, 1, 3, 8, 8, 10, 5, 6, 30, 32, 0)
       `);
     }
 
@@ -192,6 +230,16 @@ async function initDatabase() {
         ('Ny. Marlina', 'Bendahara', 2, 2026, 2031, 1)
       `);
     }
+
+    // Clean up legacy tables if exist
+    await connection.query('DROP TABLE IF EXISTS pokja_satu, pokja_dua, pokja_tiga, pokja_empat');
+
+    // Clean up default records from new tables if exist to force empty state
+    await connection.query('TRUNCATE TABLE pokja_1');
+    await connection.query('TRUNCATE TABLE pokja_2');
+    await connection.query('TRUNCATE TABLE pokja_3');
+    await connection.query('TRUNCATE TABLE pokja_4');
+    await connection.query('TRUNCATE TABLE data_umum_pkk');
 
     console.log('Database & Tabel PKK Nagari Suayan Berhasil Diinisialisasi!');
   } catch (error) {

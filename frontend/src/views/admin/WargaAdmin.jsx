@@ -90,58 +90,72 @@ function WargaAdmin({ dataWarga, setDataWarga, dataKeluarga, API_URL }) {
   };
 
   return (
-    <div className="space-y-6 text-xs">
-      <div className="flex justify-between items-center">
-        <h3 className="text-xl font-extrabold text-gray-800 font-serif">Buku Data Warga (Individu)</h3>
+    <div className="space-y-6 font-sans">
+      {/* Header Panel Card */}
+      <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+          <h3 className="text-lg font-black font-serif text-gray-900">Buku Data Warga (Individu)</h3>
+          <p className="text-[11px] text-gray-500 font-medium">Kelola biodata warga, keikutsertaan program PKK, dan data individu per Jorong</p>
+        </div>
         <button 
           onClick={handleOpenAdd}
-          className="bg-emerald-850 hover:bg-emerald-800 text-white text-xs font-bold px-4 py-2.5 rounded-md transition shadow"
+          className="bg-[#005941] hover:bg-[#004230] text-white text-xs font-bold px-4 py-2.5 rounded-lg transition shadow-sm flex items-center gap-1.5"
         >
-          + Tambah Warga
+          <span>+ Tambah Warga</span>
         </button>
       </div>
 
-      <div className="bg-white rounded-lg border shadow-sm overflow-hidden text-xs">
+      {/* Tabel Data Warga */}
+      <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden text-xs">
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse text-gray-700">
+          <table className="w-full text-left border-collapse border border-gray-300">
             <thead>
-              <tr className="bg-gray-50 border-b text-gray-400 font-bold uppercase tracking-wider text-[10px]">
-                <th className="p-4">NIK</th>
-                <th className="p-4">Nama</th>
-                <th className="p-4">Jenis Kelamin</th>
-                <th className="p-4">Pekerjaan</th>
-                <th className="p-4">No. KK</th>
-                <th className="p-4 text-center">Aksi</th>
+              <tr className="bg-[#005941] text-white text-[10px] font-bold uppercase tracking-wider text-center">
+                <th className="p-2.5 border border-emerald-950 font-mono text-left">NIK</th>
+                <th className="p-2.5 border border-emerald-950 text-left">Nama Lengkap</th>
+                <th className="p-2.5 border border-emerald-950 text-center">Jenis Kelamin</th>
+                <th className="p-2.5 border border-emerald-950 text-left">Pekerjaan</th>
+                <th className="p-2.5 border border-emerald-950 font-mono text-left">No. KK</th>
+                <th className="p-2.5 border border-emerald-950 text-center w-24">Aksi</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100 font-medium text-gray-700">
-              {dataWarga.map(item => (
-                <tr key={item.nik} className="hover:bg-gray-50/50 transition">
-                  <td className="p-4 font-mono font-bold">{item.nik}</td>
-                  <td className="p-4">
-                    <span className="block font-bold text-gray-950">{item.nama}</span>
-                    <span className="text-[10px] text-gray-400 font-medium">{item.jabatan_pkk || 'Warga Umum'}</span>
-                  </td>
-                  <td className="p-4">{item.jenis_kelamin === 'L' ? 'Laki-Laki' : 'Perempuan'}</td>
-                  <td className="p-4">{item.pekerjaan || 'Tidak Bekerja'}</td>
-                  <td className="p-4 font-mono text-gray-450">{item.no_kk}</td>
-                  <td className="p-4 text-center space-x-2">
-                    <button onClick={() => handleOpenEdit(item)} className="text-gray-400 hover:text-emerald-700 font-bold">Edit</button>
-                    <button onClick={() => handleDelete(item.nik)} className="text-red-500 hover:text-red-700 font-bold">Hapus</button>
+            <tbody className="divide-y divide-gray-200 font-medium text-gray-800 bg-white">
+              {dataWarga.length === 0 ? (
+                <tr>
+                  <td colSpan="6" className="p-8 text-center text-gray-400 font-bold italic bg-gray-50">
+                    Belum ada data warga (kosong). Silakan klik "+ Tambah Warga".
                   </td>
                 </tr>
-              ))}
+              ) : (
+                dataWarga.map(item => (
+                  <tr key={item.nik} className="hover:bg-emerald-50/20 odd:bg-white even:bg-gray-50/50 transition">
+                    <td className="p-2.5 border font-mono font-bold text-gray-900">{item.nik}</td>
+                    <td className="p-2.5 border">
+                      <span className="block font-bold text-gray-950 uppercase">{item.nama}</span>
+                      <span className="text-[10px] text-emerald-800 font-semibold">{item.jabatan_pkk || 'Warga Umum'}</span>
+                    </td>
+                    <td className="p-2.5 border text-center font-bold">{item.jenis_kelamin === 'L' ? 'L' : 'P'}</td>
+                    <td className="p-2.5 border text-gray-700">{item.pekerjaan || 'Tidak Bekerja'}</td>
+                    <td className="p-2.5 border font-mono text-gray-600">{item.no_kk}</td>
+                    <td className="p-2.5 border text-center space-x-2">
+                      <button onClick={() => handleOpenEdit(item)} className="text-[#005941] hover:underline font-bold">Edit</button>
+                      <button onClick={() => handleDelete(item.nik)} className="text-red-500 hover:underline font-bold">Hapus</button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
       </div>
 
+      {/* Editor Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-emerald-950/40 backdrop-blur-sm">
-          <div className="bg-white rounded-lg border shadow-xl w-full max-w-2xl overflow-hidden animate-in zoom-in-95 duration-200">
-            <div className="bg-emerald-900 text-white p-5 flex justify-between items-center">
-              <h4 className="font-bold text-sm">{modalType === 'add' ? 'Tambah Warga' : 'Edit Warga'}</h4>
-              <button onClick={() => setIsModalOpen(false)} className="text-emerald-200 hover:text-white text-lg font-bold">&times;</button>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-emerald-950/45 backdrop-blur-sm">
+          <div className="bg-white rounded-xl border border-gray-100 shadow-2xl w-full max-w-2xl overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="bg-[#005941] text-white p-4 flex justify-between items-center">
+              <h4 className="font-bold text-sm font-serif">{modalType === 'add' ? 'Tambah Data Warga Baru' : 'Edit Data Warga'}</h4>
+              <button onClick={() => setIsModalOpen(false)} className="text-white hover:text-gray-250 text-xl font-bold">&times;</button>
             </div>
             <form onSubmit={handleSave} className="p-6 space-y-4 max-h-[75vh] overflow-y-auto font-sans text-xs">
               

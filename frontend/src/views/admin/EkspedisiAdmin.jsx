@@ -22,15 +22,15 @@ function EkspedisiAdmin({ dataEkspedisi, setDataEkspedisi, API_URL }) {
     setEditId(item.id);
     setFormData({
       tanggal: item.tanggal ? item.tanggal.substring(0, 10) : '',
-      nomor_surat: item.nomor_surat,
-      alamat_tujuan: item.alamat_tujuan,
-      perihal: item.perihal
+      nomor_surat: item.nomor_surat || '',
+      alamat_tujuan: item.alamat_tujuan || item.alamat || '',
+      perihal: item.perihal || ''
     });
     setIsModalOpen(true);
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Apakah Anda yakin ingin menghapus data ekspedisi surat ini?")) return;
+    if (!window.confirm("Apakah Anda yakin ingin menghapus data surat ekspedisi ini?")) return;
     try {
       const res = await fetch(`${API_URL}/ekspedisi/${id}`, { method: 'DELETE' });
       if (res.ok) {
@@ -58,7 +58,7 @@ function EkspedisiAdmin({ dataEkspedisi, setDataEkspedisi, API_URL }) {
       if (res.ok) {
         if (modalType === 'add') {
           const saved = await res.json();
-          setDataEkspedisi([...dataEkspedisi, saved]);
+          setDataEkspedisi([saved, ...dataEkspedisi]);
         } else {
           setDataEkspedisi(dataEkspedisi.map(item => item.id === editId ? { ...item, ...formData } : item));
         }
@@ -74,81 +74,127 @@ function EkspedisiAdmin({ dataEkspedisi, setDataEkspedisi, API_URL }) {
 
   const runOfflineSave = () => {
     if (modalType === 'add') {
-      setDataEkspedisi([...dataEkspedisi, { id: Date.now(), ...formData }]);
+      setDataEkspedisi([{ id: Date.now(), ...formData }, ...dataEkspedisi]);
     } else {
       setDataEkspedisi(dataEkspedisi.map(item => item.id === editId ? { ...item, ...formData } : item));
     }
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h3 className="text-xl font-extrabold text-gray-800 font-serif">Buku Ekspedisi Surat Keluar</h3>
+    <div className="space-y-6 font-sans">
+      {/* Header Panel Card */}
+      <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+          <h3 className="text-lg font-black font-serif text-gray-900">Buku Ekspedisi Surat PKK</h3>
+          <p className="text-[11px] text-gray-500 font-medium">Pencatatan pengiriman surat keluar, nomor surat, alamat tujuan, dan perihal</p>
+        </div>
         <button 
           onClick={handleOpenAdd}
-          className="bg-emerald-850 hover:bg-emerald-800 text-white text-xs font-bold px-4 py-2.5 rounded-md transition shadow"
+          className="bg-[#005941] hover:bg-[#004230] text-white text-xs font-bold px-4 py-2.5 rounded-lg transition shadow-sm flex items-center gap-1.5"
         >
-          + Catat Surat Keluar
+          <span>+ Catat Surat Ekspedisi</span>
         </button>
       </div>
 
-      <div className="bg-white rounded-lg border shadow-sm overflow-hidden">
+      <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden text-xs">
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse text-xs font-medium text-gray-700">
+          <table className="w-full text-left border-collapse border border-gray-200">
             <thead>
-              <tr className="bg-gray-50 border-b text-gray-400 font-bold uppercase tracking-wider text-[10px]">
-                <th className="p-4">Tanggal Pengiriman</th>
-                <th className="p-4">Nomor Surat</th>
-                <th className="p-4">Alamat Tujuan</th>
-                <th className="p-4">Perihal</th>
-                <th className="p-4 text-center">Aksi</th>
+              <tr className="bg-[#005941] text-white text-[10px] font-bold uppercase tracking-wider text-center">
+                <th className="p-3 border border-emerald-900 text-left w-12">NO</th>
+                <th className="p-3 border border-emerald-900">TANGGAL</th>
+                <th className="p-3 border border-emerald-900 text-left">NOMOR SURAT</th>
+                <th className="p-3 border border-emerald-900 text-left">ALAMAT</th>
+                <th className="p-3 border border-emerald-900 text-left">PERIHAL</th>
+                <th className="p-3 border border-emerald-900 text-left w-24">AKSI</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100 font-medium text-gray-700">
-              {dataEkspedisi.map(item => (
-                <tr key={item.id} className="hover:bg-gray-50/50 transition">
-                  <td className="p-4 font-bold text-gray-400">{item.tanggal ? item.tanggal.substring(0, 10) : ''}</td>
-                  <td className="p-4 font-bold text-gray-900">{item.nomor_surat}</td>
-                  <td className="p-4 font-bold text-gray-800">{item.alamat_tujuan}</td>
-                  <td className="p-4 text-gray-550 font-light max-w-xs truncate">{item.perihal}</td>
-                  <td className="p-4 text-center space-x-2">
-                    <button onClick={() => handleOpenEdit(item)} className="text-gray-400 hover:text-emerald-700 font-bold">Edit</button>
-                    <button onClick={() => handleDelete(item.id)} className="text-red-500 hover:text-red-700 font-bold">Hapus</button>
+            <tbody className="divide-y divide-gray-150 font-medium text-center text-gray-700 bg-white">
+              {dataEkspedisi.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="p-8 text-center text-gray-400 font-bold italic bg-gray-50">
+                    Belum ada data ekspedisi surat. Silakan klik "+ Catat Surat Ekspedisi".
                   </td>
                 </tr>
-              ))}
+              ) : (
+                dataEkspedisi.map((item, idx) => (
+                  <tr key={item.id || idx} className="hover:bg-emerald-50/20 odd:bg-white even:bg-gray-50/50 transition">
+                    <td className="p-3 border text-left font-bold text-gray-400">{idx + 1}</td>
+                    <td className="p-3 border text-gray-600 font-mono text-center">
+                      {item.tanggal ? item.tanggal.substring(0, 10) : '-'}
+                    </td>
+                    <td className="p-3 border text-left font-bold text-gray-900 font-mono">{item.nomor_surat}</td>
+                    <td className="p-3 border text-left font-semibold text-gray-800">{item.alamat_tujuan || item.alamat}</td>
+                    <td className="p-3 border text-left text-gray-600 text-[11px] leading-relaxed max-w-sm">{item.perihal}</td>
+                    <td className="p-3 border text-left flex items-center gap-3">
+                      <button onClick={() => handleOpenEdit(item)} className="text-[#005941] hover:underline font-bold">Edit</button>
+                      <button onClick={() => handleDelete(item.id)} className="text-red-500 hover:underline font-bold">Hapus</button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-emerald-950/40 backdrop-blur-sm">
-          <div className="bg-white rounded-lg border shadow-xl w-full max-w-sm overflow-hidden animate-in zoom-in-95 duration-200">
-            <div className="bg-emerald-900 text-white p-5 flex justify-between items-center">
-              <h4 className="font-bold text-sm">{modalType === 'add' ? 'Tambah Catatan Surat' : 'Edit Catatan Surat'}</h4>
-              <button onClick={() => setIsModalOpen(false)} className="text-emerald-200 hover:text-white text-lg font-bold">&times;</button>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-emerald-950/45 backdrop-blur-sm">
+          <div className="bg-white rounded-xl border border-gray-100 shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="bg-[#005941] text-white p-4 flex justify-between items-center">
+              <h4 className="font-bold text-sm font-serif">
+                {modalType === 'add' ? 'Tambah Catatan Surat Ekspedisi' : 'Edit Surat Ekspedisi'}
+              </h4>
+              <button onClick={() => setIsModalOpen(false)} className="text-white hover:text-gray-250 text-xl font-bold">&times;</button>
             </div>
-            <form onSubmit={handleSave} className="p-6 space-y-4 font-sans text-xs">
+            <form onSubmit={handleSave} className="p-6 space-y-4 font-sans text-xs font-semibold text-gray-600">
               <div>
-                <label className="block text-[10px] font-bold text-gray-500 mb-1">Tanggal Pengiriman</label>
-                <input type="date" value={formData.tanggal || ''} onChange={(e) => setFormData({...formData, tanggal: e.target.value})} className="w-full border rounded p-2" required />
+                <label className="block text-[10px] font-bold text-gray-500 mb-1">Tanggal Surat / Pengiriman</label>
+                <input 
+                  type="date" 
+                  value={formData.tanggal || ''} 
+                  onChange={(e) => setFormData({...formData, tanggal: e.target.value})} 
+                  className="w-full border rounded p-2 text-xs text-gray-800" 
+                  required 
+                />
               </div>
               <div>
-                <label className="block text-[10px] font-bold text-gray-500 mb-1">Nomor Surat Keluar</label>
-                <input type="text" value={formData.nomor_surat || ''} onChange={(e) => setFormData({...formData, nomor_surat: e.target.value})} className="w-full border rounded p-2" placeholder="Contoh: 01/PKK/SUAYAN/VI/2026" required />
+                <label className="block text-[10px] font-bold text-gray-500 mb-1">Nomor Surat</label>
+                <input 
+                  type="text" 
+                  value={formData.nomor_surat || ''} 
+                  onChange={(e) => setFormData({...formData, nomor_surat: e.target.value})} 
+                  className="w-full border rounded p-2 text-xs text-gray-800" 
+                  placeholder="Contoh: 05/PKK-NAG/VII/2026"
+                  required 
+                />
               </div>
               <div>
-                <label className="block text-[10px] font-bold text-gray-500 mb-1">Alamat Penerima / Tujuan</label>
-                <input type="text" value={formData.alamat_tujuan || ''} onChange={(e) => setFormData({...formData, alamat_tujuan: e.target.value})} className="w-full border rounded p-2" required />
+                <label className="block text-[10px] font-bold text-gray-500 mb-1">Alamat Tujuan / Penerima</label>
+                <input 
+                  type="text" 
+                  value={formData.alamat_tujuan || ''} 
+                  onChange={(e) => setFormData({...formData, alamat_tujuan: e.target.value})} 
+                  className="w-full border rounded p-2 text-xs text-gray-800" 
+                  placeholder="Contoh: TP-PKK Kecamatan Akabiluru"
+                  required 
+                />
               </div>
               <div>
-                <label className="block text-[10px] font-bold text-gray-500 mb-1">Perihal / Isi Ringkas</label>
-                <input type="text" value={formData.perihal || ''} onChange={(e) => setFormData({...formData, perihal: e.target.value})} className="w-full border rounded p-2" required />
+                <label className="block text-[10px] font-bold text-gray-500 mb-1">Perihal / Isi Ringkas Surat</label>
+                <textarea 
+                  rows="3"
+                  value={formData.perihal || ''} 
+                  onChange={(e) => setFormData({...formData, perihal: e.target.value})} 
+                  className="w-full border rounded p-2 text-xs text-gray-800" 
+                  placeholder="Uraikan perihal atau maksud pengiriman surat..."
+                  required
+                ></textarea>
               </div>
-              <div className="pt-4 flex space-x-2 border-t">
+
+              <div className="pt-4 flex space-x-2 border-t mt-4">
                 <button type="button" onClick={() => setIsModalOpen(false)} className="flex-1 border text-gray-500 font-bold py-2 rounded">Batal</button>
-                <button type="submit" className="flex-1 bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2 rounded shadow">Simpan</button>
+                <button type="submit" className="flex-1 bg-[#005941] hover:bg-[#004230] text-white font-bold py-2 rounded shadow">Simpan</button>
               </div>
             </form>
           </div>

@@ -323,29 +323,29 @@ function KeluargaAdmin({ dataKeluarga, setDataKeluarga, API_URL }) {
   });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 font-sans">
       
-      {/* Header Panel */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      {/* Header Panel Card */}
+      <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h3 className="text-xl font-extrabold text-gray-800 font-serif">Buku Data Keluarga (KK)</h3>
-          <p className="text-[10px] text-gray-400 font-medium">Kelola keluarga, sanitasi, dasawisma, dan verifikasi berkas warga mandiri</p>
+          <h3 className="text-lg font-black font-serif text-gray-900">Buku Data Keluarga (KK)</h3>
+          <p className="text-[11px] text-gray-500 font-medium">Kelola data keluarga, sanitasi, dasawisma, dan verifikasi berkas warga mandiri</p>
         </div>
         <button 
           onClick={handleOpenAdd}
-          className="bg-emerald-850 hover:bg-emerald-800 text-white text-xs font-bold px-4 py-2.5 rounded-md transition shadow"
+          className="bg-[#005941] hover:bg-[#004230] text-white text-xs font-bold px-4 py-2.5 rounded-lg transition shadow-sm flex items-center gap-1.5"
         >
-          + Tambah Keluarga
+          <span>+ Tambah Keluarga</span>
         </button>
       </div>
 
       {/* Filter Status Verifikasi */}
-      <div className="flex items-center space-x-2 text-xs font-semibold text-gray-500 bg-gray-100 p-1.5 rounded-lg w-max select-none">
+      <div className="flex items-center space-x-2 text-xs font-semibold text-gray-500 bg-gray-100 p-1.5 rounded-xl w-max select-none border border-gray-200">
         {['All', 'Approved', 'Pending', 'Rejected'].map(status => (
           <button
             key={status}
             onClick={() => setFilterStatus(status)}
-            className={`px-3 py-1.5 rounded-md transition ${filterStatus === status ? 'bg-white text-emerald-850 font-bold shadow' : 'hover:text-emerald-800'}`}
+            className={`px-3 py-1.5 rounded-lg transition font-bold ${filterStatus === status ? 'bg-[#005941] text-white shadow-xs' : 'hover:text-gray-900'}`}
           >
             {status === 'All' ? 'Semua' : status === 'Approved' ? 'Disetujui' : status === 'Pending' ? 'Pending' : 'Ditolak'}
           </button>
@@ -353,62 +353,62 @@ function KeluargaAdmin({ dataKeluarga, setDataKeluarga, API_URL }) {
       </div>
 
       {/* Tabel Data */}
-      <div className="bg-white rounded-lg border shadow-sm overflow-hidden text-xs">
+      <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden text-xs">
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse text-gray-700">
+          <table className="w-full text-left border-collapse border border-gray-300">
             <thead>
-              <tr className="bg-gray-50 border-b text-gray-400 font-bold uppercase tracking-wider text-[10px]">
-                <th className="p-4">No. KK</th>
-                <th className="p-4">Jorong &amp; Dasawisma</th>
-                <th className="p-4">RT/RW/Dusun</th>
-                <th className="p-4 text-center">Kriteria Rumah</th>
-                <th className="p-4 text-center">UP2K</th>
-                <th className="p-4 text-center">Status Verifikasi</th>
-                <th className="p-4 text-center">Aksi</th>
+              <tr className="bg-[#005941] text-white text-[10px] font-bold uppercase tracking-wider text-center">
+                <th className="p-2.5 border border-emerald-950 text-left">No. KK</th>
+                <th className="p-2.5 border border-emerald-950 text-left">Jorong &amp; Dasawisma</th>
+                <th className="p-2.5 border border-emerald-950 text-left">RT/RW/Dusun</th>
+                <th className="p-2.5 border border-emerald-950 text-center">Kriteria Rumah</th>
+                <th className="p-2.5 border border-emerald-950 text-center">UP2K</th>
+                <th className="p-2.5 border border-emerald-950 text-center">Status Verifikasi</th>
+                <th className="p-2.5 border border-emerald-950 text-center w-24">Aksi</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100 font-medium">
+            <tbody className="divide-y divide-gray-200 font-medium text-gray-800 bg-white">
               {filteredKeluarga.map(item => (
-                <tr key={item.no_kk} className="hover:bg-gray-50/50 transition">
-                  <td className="p-4 font-bold text-gray-900">{item.no_kk}</td>
-                  <td className="p-4">
+                <tr key={item.no_kk} className="hover:bg-emerald-50/20 odd:bg-white even:bg-gray-50/50 transition">
+                  <td className="p-2.5 border font-bold font-mono text-gray-900">{item.no_kk}</td>
+                  <td className="p-2.5 border">
                     <span className="block font-bold text-gray-800">{item.nama_jorong || `Jorong ${item.id_jorong}`}</span>
-                    <span className="bg-emerald-50 text-emerald-800 px-1.5 py-0.5 rounded text-[9px] font-bold mt-1 inline-block">
+                    <span className="bg-emerald-100 text-emerald-900 px-2 py-0.5 rounded text-[10px] font-extrabold mt-1 inline-block">
                       {item.dasawisma}
                     </span>
                   </td>
-                  <td className="p-4 text-gray-500">
+                  <td className="p-2.5 border text-gray-600">
                     {item.rt ? `RT ${item.rt} / RW ${item.rw}` : '-'}
-                    <span className="block text-[10px] text-gray-450 mt-0.5">{item.dusun || ''}</span>
+                    <span className="block text-[10px] text-gray-400 mt-0.5">{item.dusun || ''}</span>
                   </td>
-                  <td className="p-4 text-center font-bold">{item.kriteria_rumah}</td>
-                  <td className="p-4 text-center">
+                  <td className="p-2.5 border text-center font-bold">{item.kriteria_rumah}</td>
+                  <td className="p-2.5 border text-center">
                     {item.up2k_aktif ? (
-                      <span className="text-emerald-700 font-bold" title={item.up2k_jenis}>Ya</span>
+                      <span className="text-emerald-800 font-bold" title={item.up2k_jenis}>Ya</span>
                     ) : 'Tidak'}
                   </td>
-                  <td className="p-4 text-center">
+                  <td className="p-2.5 border text-center">
                     {item.status_verifikasi === 'Approved' ? (
-                      <span className="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold text-[9px]">Disetujui</span>
+                      <span className="bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full font-bold text-[10px]">Disetujui</span>
                     ) : item.status_verifikasi === 'Pending' ? (
-                      <span className="bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full font-bold text-[9px] animate-pulse">Pending</span>
+                      <span className="bg-amber-100 text-amber-800 px-2.5 py-1 rounded-full font-bold text-[10px] animate-pulse">Pending</span>
                     ) : (
-                      <span className="bg-red-100 text-red-800 px-2 py-0.5 rounded-full font-bold text-[9px]">Ditolak</span>
+                      <span className="bg-red-100 text-red-800 px-2.5 py-1 rounded-full font-bold text-[10px]">Ditolak</span>
                     )}
                   </td>
-                  <td className="p-4 text-center">
-                    <div className="flex flex-col items-center gap-1.5">
+                  <td className="p-2.5 border text-center">
+                    <div className="flex flex-col items-center gap-1">
                       {item.status_verifikasi === 'Pending' && (
-                        <div className="flex space-x-1.5 mb-1">
+                        <div className="flex space-x-1 mb-1">
                           <button 
                             onClick={() => handleVerifyStatus(item.no_kk, 'Approved')} 
-                            className="bg-emerald-600 hover:bg-emerald-700 text-white text-[9px] px-2 py-1 rounded font-bold"
+                            className="bg-[#005941] hover:bg-[#004230] text-white text-[9px] px-2 py-1 rounded font-bold transition"
                           >
                             Setujui
                           </button>
                           <button 
                             onClick={() => handleVerifyStatus(item.no_kk, 'Rejected')} 
-                            className="bg-red-500 hover:bg-red-600 text-white text-[9px] px-2 py-1 rounded font-bold"
+                            className="bg-red-600 hover:bg-red-700 text-white text-[9px] px-2 py-1 rounded font-bold transition"
                           >
                             Tolak
                           </button>
@@ -416,8 +416,8 @@ function KeluargaAdmin({ dataKeluarga, setDataKeluarga, API_URL }) {
                       )}
                       
                       <div className="flex space-x-2">
-                        <button onClick={() => handleOpenEdit(item)} className="text-gray-400 hover:text-emerald-700 font-bold">Edit</button>
-                        <button onClick={() => handleDelete(item.no_kk)} className="text-red-400 hover:text-red-700 font-bold">Hapus</button>
+                        <button onClick={() => handleOpenEdit(item)} className="text-[#005941] hover:underline font-bold">Edit</button>
+                        <button onClick={() => handleDelete(item.no_kk)} className="text-red-500 hover:underline font-bold">Hapus</button>
                       </div>
                     </div>
                   </td>
@@ -425,7 +425,9 @@ function KeluargaAdmin({ dataKeluarga, setDataKeluarga, API_URL }) {
               ))}
               {filteredKeluarga.length === 0 && (
                 <tr>
-                  <td colSpan="7" className="p-8 text-center text-gray-400 font-medium">Tidak ada data keluarga (kosong)</td>
+                  <td colSpan="7" className="p-8 text-center text-gray-400 font-bold italic bg-gray-50">
+                    Tidak ada data keluarga (kosong). Silakan klik "+ Tambah Keluarga".
+                  </td>
                 </tr>
               )}
             </tbody>
@@ -435,11 +437,11 @@ function KeluargaAdmin({ dataKeluarga, setDataKeluarga, API_URL }) {
 
       {/* Editor Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-emerald-950/40 backdrop-blur-sm">
-          <div className="bg-white rounded-lg border shadow-xl w-full max-w-3xl overflow-hidden animate-in zoom-in-95 duration-200">
-            <div className="bg-emerald-900 text-white p-4 flex justify-between items-center">
-              <h4 className="font-bold text-sm">{modalType === 'add' ? 'Tambah Keluarga Baru' : 'Edit Data Keluarga'}</h4>
-              <button onClick={() => setIsModalOpen(false)} className="text-emerald-250 hover:text-white text-lg font-bold">&times;</button>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-emerald-950/45 backdrop-blur-sm">
+          <div className="bg-white rounded-xl border border-gray-100 shadow-2xl w-full max-w-4xl overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="bg-[#005941] text-white p-4 flex justify-between items-center">
+              <h4 className="font-bold text-sm font-serif">{modalType === 'add' ? 'Tambah Data Keluarga Baru' : 'Edit Data Keluarga'}</h4>
+              <button onClick={() => setIsModalOpen(false)} className="text-white hover:text-gray-250 text-xl font-bold">&times;</button>
             </div>
             
             <form onSubmit={handleSave} className="p-6 space-y-5 max-h-[75vh] overflow-y-auto font-sans text-xs font-semibold text-gray-600">

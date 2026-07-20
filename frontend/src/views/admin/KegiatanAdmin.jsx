@@ -4,9 +4,14 @@ function KegiatanAdmin({ dataKegiatan, setDataKegiatan, API_URL }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState('add');
   const [editId, setEditId] = useState(null);
+
+  const STANDARD_KATEGORI = ['Rapat', 'Penyuluhan', 'Pelatihan', 'Kunjungan', 'Gotong Royong'];
+
   const [formData, setFormData] = useState({
     nama: '', jabatan: '', tanggal: '', tempat: '', uraian_kegiatan: '', kategori: 'Rapat'
   });
+  const [isLainnya, setIsLainnya] = useState(false);
+  const [customKategori, setCustomKategori] = useState('');
 
   const handleOpenAdd = () => {
     setModalType('add');
@@ -14,20 +19,33 @@ function KegiatanAdmin({ dataKegiatan, setDataKegiatan, API_URL }) {
     setFormData({
       nama: '', jabatan: '', tanggal: '', tempat: '', uraian_kegiatan: '', kategori: 'Rapat'
     });
+    setIsLainnya(false);
+    setCustomKategori('');
     setIsModalOpen(true);
   };
 
   const handleOpenEdit = (item) => {
     setModalType('edit');
     setEditId(item.id);
+    const kat = item.kategori || 'Rapat';
+    const isCustom = !STANDARD_KATEGORI.includes(kat);
+
     setFormData({
       nama: item.nama,
       jabatan: item.jabatan,
       tanggal: item.tanggal ? item.tanggal.substring(0, 10) : '',
       tempat: item.tempat,
       uraian_kegiatan: item.uraian_kegiatan,
-      kategori: item.kategori || 'Rapat'
+      kategori: kat
     });
+
+    if (isCustom) {
+      setIsLainnya(true);
+      setCustomKategori(kat === 'Lainnya' ? '' : kat);
+    } else {
+      setIsLainnya(false);
+      setCustomKategori('');
+    }
     setIsModalOpen(true);
   };
 
@@ -51,7 +69,12 @@ function KegiatanAdmin({ dataKegiatan, setDataKegiatan, API_URL }) {
     const url = modalType === 'add' ? `${API_URL}/kegiatan` : `${API_URL}/kegiatan/${editId}`;
     const method = modalType === 'add' ? 'POST' : 'PUT';
     
-    let bodyData = { ...formData };
+    let finalKategori = formData.kategori;
+    if (isLainnya) {
+      finalKategori = customKategori.trim() || 'Lainnya';
+    }
+
+    let bodyData = { ...formData, kategori: finalKategori };
     if (modalType === 'add') {
       bodyData.foto = "https://images.unsplash.com/photo-1531538606174-0f90ff5dce83?auto=format&fit=crop&q=80&w=400";
     }
@@ -67,115 +90,220 @@ function KegiatanAdmin({ dataKegiatan, setDataKegiatan, API_URL }) {
           const saved = await res.json();
           setDataKegiatan([saved, ...dataKegiatan]);
         } else {
-          setDataKegiatan(dataKegiatan.map(item => item.id === editId ? { ...item, ...formData } : item));
+          setDataKegiatan(dataKegiatan.map(item => item.id === editId ? { ...item, ...bodyData } : item));
         }
       } else {
-        runOfflineSave();
+        runOfflineSave(bodyData);
       }
     } catch (err) {
       console.warn(err);
-      runOfflineSave();
+      runOfflineSave(bodyData);
     }
     setIsModalOpen(false);
   };
 
-  const runOfflineSave = () => {
+  const runOfflineSave = (bodyData) => {
     if (modalType === 'add') {
-      setDataKegiatan([{ id: Date.now(), ...formData, foto: "https://images.unsplash.com/photo-1531538606174-0f90ff5dce83?auto=format&fit=crop&q=80&w=400" }, ...dataKegiatan]);
+      setDataKegiatan([{ id: Date.now(), ...bodyData, foto: "https://images.unsplash.com/photo-1531538606174-0f90ff5dce83?auto=format&fit=crop&q=80&w=400" }, ...dataKegiatan]);
     } else {
-      setDataKegiatan(dataKegiatan.map(item => item.id === editId ? { ...item, ...formData } : item));
+      setDataKegiatan(dataKegiatan.map(item => item.id === editId ? { ...item, ...bodyData } : item));
     }
   };
 
+  const handleKategoriSelectChange = (e) => {
+    const val = e.target.value;
+    if (val === 'Lainnya') {
+      setIsLainnya(true);
+      setFormData({ ...formData, kategori: customKategori || 'Lainnya' });
+    } else {
+      setIsLainnya(false);
+      setFormData({ ...formData, kategori: val });
+    }
+  };
+
+  const handleCustomKategoriChange = (e) => {
+    const val = e.target.value;
+    setCustomKategori(val);
+    setFormData({ ...formData, kategori: val || 'Lainnya' });
+  };
+
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h3 className="text-xl font-extrabold text-gray-800 font-serif">Buku Catatan Kegiatan PKK</h3>
+    <div className="space-y-6 font-sans">
+      {/* Header Panel Card */}
+      <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+          <h3 className="text-lg font-black font-serif text-gray-900">Buku Catatan Kegiatan PKK</h3>
+          <p className="text-[11px] text-gray-500 font-medium">Laporan partisipasi, jadwal, lokasi, dan uraian pelaksanaan kegiatan PKK</p>
+        </div>
         <button 
           onClick={handleOpenAdd}
-          className="bg-emerald-850 hover:bg-emerald-800 text-white text-xs font-bold px-4 py-2.5 rounded-md transition shadow"
+          className="bg-[#005941] hover:bg-[#004230] text-white text-xs font-bold px-4 py-2.5 rounded-lg transition shadow-sm flex items-center gap-1.5"
         >
-          + Catat Kegiatan
+          <span>+ Tambah Kegiatan PKK</span>
         </button>
       </div>
 
-      <div className="bg-white rounded-lg border shadow-sm overflow-hidden">
+      <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden text-xs">
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse text-xs font-medium text-gray-700">
+          <table className="w-full text-left border-collapse border border-gray-200">
             <thead>
-              <tr className="bg-gray-50 border-b text-gray-400 font-bold uppercase tracking-wider text-[10px]">
-                <th className="p-4">Tanggal</th>
-                <th className="p-4">Nama Pelapor</th>
-                <th className="p-4">Tempat &amp; Kategori</th>
-                <th className="p-4">Uraian Kegiatan</th>
-                <th className="p-4 text-center">Aksi</th>
+              {/* Row 1 Header */}
+              <tr className="bg-[#005941] text-white text-[10px] font-bold uppercase tracking-wider text-center">
+                <th rowSpan={2} className="p-3 border border-emerald-900 text-left w-12">NO</th>
+                <th rowSpan={2} className="p-3 border border-emerald-900 text-left">NAMA</th>
+                <th rowSpan={2} className="p-3 border border-emerald-900 text-left">JABATAN</th>
+                <th colSpan={3} className="p-2 border border-emerald-900">KEGIATAN</th>
+                <th rowSpan={2} className="p-3 border border-emerald-900">KATEGORI / KETERANGAN</th>
+                <th rowSpan={2} className="p-3 border border-emerald-900 text-left w-24">AKSI</th>
+              </tr>
+              {/* Row 2 Header Sub-kolom KEGIATAN */}
+              <tr className="bg-[#004e38] text-white text-[9px] font-bold text-center">
+                <th className="p-2 border border-emerald-950">TANGGAL</th>
+                <th className="p-2 border border-emerald-950 text-left">TEMPAT</th>
+                <th className="p-2 border border-emerald-950 text-left">URAIAN</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100 font-medium text-gray-700">
-              {dataKegiatan.map(item => (
-                <tr key={item.id} className="hover:bg-gray-50/50 transition">
-                  <td className="p-4 font-bold text-gray-450">{item.tanggal ? item.tanggal.substring(0, 10) : ''}</td>
-                  <td className="p-4">
-                    <span className="block font-bold text-gray-900">{item.nama}</span>
-                    <span className="text-[10px] text-gray-450">{item.jabatan}</span>
-                  </td>
-                  <td className="p-4">
-                    <span className="block font-bold text-gray-800">{item.tempat}</span>
-                    <span className="bg-amber-50 text-amber-800 px-2 py-0.5 rounded-full font-bold text-[9px]">{item.kategori || 'Rapat'}</span>
-                  </td>
-                  <td className="p-4 max-w-xs truncate text-gray-500 font-light">{item.uraian_kegiatan}</td>
-                  <td className="p-4 text-center space-x-2">
-                    <button onClick={() => handleOpenEdit(item)} className="text-gray-400 hover:text-emerald-700 font-bold">Edit</button>
-                    <button onClick={() => handleDelete(item.id)} className="text-red-500 hover:text-red-700 font-bold">Hapus</button>
+            <tbody className="divide-y divide-gray-150 font-medium text-center text-gray-700 bg-white">
+              {dataKegiatan.length === 0 ? (
+                <tr>
+                  <td colSpan={8} className="p-8 text-center text-gray-400 font-bold italic bg-gray-50">
+                    Belum ada data catatan kegiatan. Silakan klik "+ Catat Kegiatan Baru".
                   </td>
                 </tr>
-              ))}
+              ) : (
+                dataKegiatan.map((item, idx) => (
+                  <tr key={item.id || idx} className="hover:bg-emerald-50/20 odd:bg-white even:bg-gray-50/50 transition">
+                    <td className="p-3 border text-left font-bold text-gray-400">{idx + 1}</td>
+                    <td className="p-3 border text-left font-bold text-gray-900">{item.nama}</td>
+                    <td className="p-3 border text-left text-gray-600">{item.jabatan}</td>
+                    <td className="p-3 border text-gray-600 font-mono text-center">
+                      {item.tanggal ? item.tanggal.substring(0, 10) : '-'}
+                    </td>
+                    <td className="p-3 border text-left font-semibold text-gray-800">{item.tempat}</td>
+                    <td className="p-3 border text-left text-gray-600 text-[11px] leading-relaxed max-w-sm">
+                      {item.uraian_kegiatan}
+                    </td>
+                    <td className="p-3 border">
+                      <span className="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold text-[10px]">
+                        {item.kategori || 'Rapat'}
+                      </span>
+                    </td>
+                    <td className="p-3 border text-left flex items-center gap-3">
+                      <button onClick={() => handleOpenEdit(item)} className="text-[#005941] hover:underline font-bold">Edit</button>
+                      <button onClick={() => handleDelete(item.id)} className="text-red-500 hover:underline font-bold">Hapus</button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-emerald-950/40 backdrop-blur-sm">
-          <div className="bg-white rounded-lg border shadow-xl w-full max-w-sm overflow-hidden animate-in zoom-in-95 duration-200">
-            <div className="bg-emerald-900 text-white p-5 flex justify-between items-center">
-              <h4 className="font-bold text-sm">{modalType === 'add' ? 'Tambah Catatan Kegiatan' : 'Edit Catatan Kegiatan'}</h4>
-              <button onClick={() => setIsModalOpen(false)} className="text-emerald-200 hover:text-white text-lg font-bold">&times;</button>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-emerald-950/45 backdrop-blur-sm">
+          <div className="bg-white rounded-xl border border-gray-100 shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="bg-[#005941] text-white p-4 flex justify-between items-center">
+              <h4 className="font-bold text-sm font-serif">
+                {modalType === 'add' ? 'Tambah Catatan Kegiatan Baru' : 'Edit Catatan Kegiatan'}
+              </h4>
+              <button onClick={() => setIsModalOpen(false)} className="text-white hover:text-gray-250 text-xl font-bold">&times;</button>
             </div>
-            <form onSubmit={handleSave} className="p-6 space-y-4 font-sans text-xs">
+            <form onSubmit={handleSave} className="p-6 space-y-4 font-sans text-xs font-semibold text-gray-600">
               <div>
-                <label className="block text-[10px] font-bold text-gray-500 mb-1">Tanggal Kegiatan</label>
-                <input type="date" value={formData.tanggal || ''} onChange={(e) => setFormData({...formData, tanggal: e.target.value})} className="w-full border rounded p-2" required />
+                <label className="block text-[10px] font-bold text-gray-500 mb-1">Nama</label>
+                <input 
+                  type="text" 
+                  value={formData.nama || ''} 
+                  onChange={(e) => setFormData({...formData, nama: e.target.value})} 
+                  className="w-full border rounded p-2 text-xs text-gray-800" 
+                  placeholder="Nama Pembawa/Pelapor Kegiatan"
+                  required 
+                />
               </div>
               <div>
-                <label className="block text-[10px] font-bold text-gray-500 mb-1">Kategori Kegiatan</label>
-                <select value={formData.kategori || 'Rapat'} onChange={(e) => setFormData({...formData, kategori: e.target.value})} className="w-full border rounded p-2 bg-white">
+                <label className="block text-[10px] font-bold text-gray-500 mb-1">Jabatan</label>
+                <input 
+                  type="text" 
+                  value={formData.jabatan || ''} 
+                  onChange={(e) => setFormData({...formData, jabatan: e.target.value})} 
+                  className="w-full border rounded p-2 text-xs text-gray-800" 
+                  placeholder="Contoh: Ketua Pokja I / Kader Posyandu"
+                  required 
+                />
+              </div>
+
+              <div className="border-t pt-3">
+                <span className="block text-[10px] font-bold text-emerald-800 uppercase tracking-wider mb-2">Detail Kegiatan</span>
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-[10px] font-bold text-gray-500 mb-1">Tanggal Kegiatan</label>
+                    <input 
+                      type="date" 
+                      value={formData.tanggal || ''} 
+                      onChange={(e) => setFormData({...formData, tanggal: e.target.value})} 
+                      className="w-full border rounded p-2 text-xs text-gray-800" 
+                      required 
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-bold text-gray-500 mb-1">Tempat Pelaksanaan</label>
+                    <input 
+                      type="text" 
+                      value={formData.tempat || ''} 
+                      onChange={(e) => setFormData({...formData, tempat: e.target.value})} 
+                      className="w-full border rounded p-2 text-xs text-gray-800" 
+                      placeholder="Contoh: Aula Kantor Nagari Suayan"
+                      required 
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-bold text-gray-500 mb-1">Uraian Kegiatan</label>
+                    <textarea 
+                      rows="3" 
+                      value={formData.uraian_kegiatan || ''} 
+                      onChange={(e) => setFormData({...formData, uraian_kegiatan: e.target.value})} 
+                      className="w-full border rounded p-2 text-xs text-gray-800" 
+                      placeholder="Uraikan detail ringkasan kegiatan yang dilaksanakan..."
+                      required
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-bold text-gray-500 mb-1">Kategori / Keterangan</label>
+                <select 
+                  value={isLainnya ? 'Lainnya' : (formData.kategori || 'Rapat')} 
+                  onChange={handleKategoriSelectChange} 
+                  className="w-full border rounded p-2 text-xs bg-white text-gray-800 mb-2"
+                >
                   <option value="Rapat">Rapat</option>
                   <option value="Penyuluhan">Penyuluhan</option>
                   <option value="Pelatihan">Pelatihan</option>
                   <option value="Kunjungan">Kunjungan</option>
-                  <option value="Lainnya">Lainnya</option>
+                  <option value="Gotong Royong">Gotong Royong</option>
+                  <option value="Lainnya">Lainnya (Ketik Manual)</option>
                 </select>
+
+                {isLainnya && (
+                  <div className="animate-in fade-in zoom-in-95 duration-150">
+                    <label className="block text-[9px] font-bold text-emerald-800 mb-1">Ketik Kategori / Keterangan Lainnya:</label>
+                    <input 
+                      type="text" 
+                      value={customKategori} 
+                      onChange={handleCustomKategoriChange} 
+                      placeholder="Contoh: Lomba Dasa Wisma / Sosialisasi"
+                      className="w-full border border-emerald-600 rounded p-2 text-xs text-gray-800 bg-emerald-50/30 focus:outline-none focus:ring-1 focus:ring-emerald-700" 
+                      required={isLainnya}
+                    />
+                  </div>
+                )}
               </div>
-              <div>
-                <label className="block text-[10px] font-bold text-gray-500 mb-1">Nama Pembawa/Pelapor</label>
-                <input type="text" value={formData.nama || ''} onChange={(e) => setFormData({...formData, nama: e.target.value})} className="w-full border rounded p-2" required />
-              </div>
-              <div>
-                <label className="block text-[10px] font-bold text-gray-500 mb-1">Jabatan Pelapor</label>
-                <input type="text" value={formData.jabatan || ''} onChange={(e) => setFormData({...formData, jabatan: e.target.value})} className="w-full border rounded p-2" required />
-              </div>
-              <div>
-                <label className="block text-[10px] font-bold text-gray-500 mb-1">Tempat Pelaksanaan</label>
-                <input type="text" value={formData.tempat || ''} onChange={(e) => setFormData({...formData, tempat: e.target.value})} className="w-full border rounded p-2" required />
-              </div>
-              <div>
-                <label className="block text-[10px] font-bold text-gray-500 mb-1">Uraian / Ringkasan Kegiatan</label>
-                <textarea rows="3" value={formData.uraian_kegiatan || ''} onChange={(e) => setFormData({...formData, uraian_kegiatan: e.target.value})} className="w-full border rounded p-2" required></textarea>
-              </div>
-              <div className="pt-4 flex space-x-2 border-t">
+
+              <div className="pt-4 flex space-x-2 border-t mt-4">
                 <button type="button" onClick={() => setIsModalOpen(false)} className="flex-1 border text-gray-500 font-bold py-2 rounded">Batal</button>
-                <button type="submit" className="flex-1 bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2 rounded shadow">Simpan</button>
+                <button type="submit" className="flex-1 bg-[#005941] hover:bg-[#004230] text-white font-bold py-2 rounded shadow">Simpan</button>
               </div>
             </form>
           </div>

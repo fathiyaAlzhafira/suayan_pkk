@@ -11,6 +11,7 @@ const keuanganRoutes = require('./KeuanganRoutes');
 const kegiatanRoutes = require('./KegiatanRoutes');
 const inventarisRoutes = require('./InventarisRoutes');
 const ekspedisiRoutes = require('./EkspedisiRoutes');
+const anggotaRoutes = require('./AnggotaRoutes');
 const umumRoutes = require('./UmumRoutes');
 
 router.use('/auth', authRoutes);
@@ -23,6 +24,7 @@ router.use('/', keuanganRoutes);
 router.use('/', kegiatanRoutes);
 router.use('/', inventarisRoutes);
 router.use('/', ekspedisiRoutes);
+router.use('/', anggotaRoutes);
 router.use('/', umumRoutes);
 
 module.exports = router;
