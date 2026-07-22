@@ -225,8 +225,8 @@ function PokjaAdmin({
                   <tr className="bg-[#005941] text-white text-[10px] font-bold uppercase tracking-wider text-center">
                     <th rowSpan={3} className="p-3 border border-emerald-900 text-left w-12">NO</th>
                     <th rowSpan={3} className="p-3 border border-emerald-900 text-left min-w-[120px]">NAMA JORONG</th>
-                    <th colSpan={4} className="p-2 border border-emerald-900">JUMLAH KADER</th>
-                    <th colSpan={6} className="p-2 border border-emerald-900">PENGHAYATAN DAN PENGALAMAN PANCASILA</th>
+                    <th colSpan={3} className="p-2 border border-emerald-900">JUMLAH KADER</th>
+                    <th colSpan={8} className="p-2 border border-emerald-900">PENGHAYATAN DAN PENGALAMAN PANCASILA</th>
                     <th colSpan={5} className="p-2 border border-emerald-900">GOTONG ROYONG</th>
                     <th rowSpan={3} className="p-3 border border-emerald-900">KETERANGAN</th>
                     <th rowSpan={3} className="p-3 border border-emerald-900 text-left w-24">AKSI</th>
@@ -235,10 +235,10 @@ function PokjaAdmin({
                     <th rowSpan={2} className="p-2 border border-emerald-950">PKBN</th>
                     <th rowSpan={2} className="p-2 border border-emerald-950">PKDRT</th>
                     <th rowSpan={2} className="p-2 border border-emerald-950">POLA ASUH</th>
-                    <th rowSpan={2} className="p-2 border border-emerald-950">LANSIA</th>
                     <th colSpan={2} className="p-2 border border-emerald-950">SIMULASI PKBN</th>
                     <th colSpan={2} className="p-2 border border-emerald-950">SIMULASI PKDRT</th>
                     <th colSpan={2} className="p-2 border border-emerald-950">SIMULASI POLA ASUH</th>
+                    <th colSpan={2} className="p-2 border border-emerald-950">LANSIA</th>
                     <th rowSpan={2} className="p-2 border border-emerald-950">KERJA BAKTI<br/>(JML ANGGOTA)</th>
                     <th rowSpan={2} className="p-2 border border-emerald-950">RUKUN KEMATIAN<br/>(JML KELOMPOK)</th>
                     <th rowSpan={2} className="p-2 border border-emerald-950">KEAGAMAAN<br/>(JML ANGGOTA)</th>
@@ -252,12 +252,14 @@ function PokjaAdmin({
                     <th className="p-1 border border-emerald-950">JML ANGG</th>
                     <th className="p-1 border border-emerald-950">JML KEL</th>
                     <th className="p-1 border border-emerald-950">JML ANGG</th>
+                    <th className="p-1 border border-emerald-950">JML KEL</th>
+                    <th className="p-1 border border-emerald-950">JML ANGG</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-150 font-medium text-center text-gray-700 bg-white">
                   {dataPokja1.length === 0 ? (
                     <tr>
-                      <td colSpan={19} className="p-8 text-center text-gray-400 font-bold italic bg-gray-50">Belum ada data jorong. Silakan klik "+ Tambah Rekap Jorong".</td>
+                      <td colSpan={20} className="p-8 text-center text-gray-400 font-bold italic bg-gray-50">Belum ada data jorong. Silakan klik "+ Tambah Rekap Jorong".</td>
                     </tr>
                   ) : (
                     <>
@@ -268,13 +270,14 @@ function PokjaAdmin({
                           <td className="p-3 border">{item.kader_pkbn || 0}</td>
                           <td className="p-3 border">{item.kader_pkdrt || 0}</td>
                           <td className="p-3 border">{item.kader_pola_asuh || 0}</td>
-                          <td className="p-3 border">{item.kader_lansia || 0}</td>
                           <td className="p-3 border text-gray-600">{item.simulasi_pkbn_jml_kelompok || 0}</td>
                           <td className="p-3 border text-gray-600">{item.simulasi_pkbn_jml_anggota || 0}</td>
                           <td className="p-3 border text-gray-600">{item.simulasi_pkdrt_jml_kelompok || 0}</td>
                           <td className="p-3 border text-gray-600">{item.simulasi_pkdrt_jml_anggota || 0}</td>
                           <td className="p-3 border text-gray-600">{item.simulasi_pola_asuh_jml_kelompok || 0}</td>
                           <td className="p-3 border text-gray-600">{item.simulasi_pola_asuh_jml_anggota || 0}</td>
+                          <td className="p-3 border text-gray-600">{item.simulasi_lansia_jml_kelompok || 0}</td>
+                          <td className="p-3 border text-gray-600">{item.simulasi_lansia_jml_anggota || 0}</td>
                           <td className="p-3 border font-bold text-emerald-800 bg-emerald-50/10">{item.gotong_royong_kerja_bakti_jml_anggota || 0}</td>
                           <td className="p-3 border">{item.gotong_royong_rukun_kematian_jml_kelompok || 0}</td>
                           <td className="p-3 border">{item.gotong_royong_keagamaan_jml_anggota || 0}</td>
@@ -292,13 +295,14 @@ function PokjaAdmin({
                         <td className="p-3 border">{sumData(dataPokja1, 'kader_pkbn')}</td>
                         <td className="p-3 border">{sumData(dataPokja1, 'kader_pkdrt')}</td>
                         <td className="p-3 border">{sumData(dataPokja1, 'kader_pola_asuh')}</td>
-                        <td className="p-3 border">{sumData(dataPokja1, 'kader_lansia')}</td>
                         <td className="p-3 border">{sumData(dataPokja1, 'simulasi_pkbn_jml_kelompok')}</td>
                         <td className="p-3 border">{sumData(dataPokja1, 'simulasi_pkbn_jml_anggota')}</td>
                         <td className="p-3 border">{sumData(dataPokja1, 'simulasi_pkdrt_jml_kelompok')}</td>
                         <td className="p-3 border">{sumData(dataPokja1, 'simulasi_pkdrt_jml_anggota')}</td>
                         <td className="p-3 border">{sumData(dataPokja1, 'simulasi_pola_asuh_jml_kelompok')}</td>
                         <td className="p-3 border">{sumData(dataPokja1, 'simulasi_pola_asuh_jml_anggota')}</td>
+                        <td className="p-3 border">{sumData(dataPokja1, 'simulasi_lansia_jml_kelompok')}</td>
+                        <td className="p-3 border">{sumData(dataPokja1, 'simulasi_lansia_jml_anggota')}</td>
                         <td className="p-3 border font-extrabold text-emerald-900 bg-emerald-100/50">{sumData(dataPokja1, 'gotong_royong_kerja_bakti_jml_anggota')}</td>
                         <td className="p-3 border">{sumData(dataPokja1, 'gotong_royong_rukun_kematian_jml_kelompok')}</td>
                         <td className="p-3 border">{sumData(dataPokja1, 'gotong_royong_keagamaan_jml_anggota')}</td>
@@ -325,16 +329,17 @@ function PokjaAdmin({
                   <tr className="bg-[#005941] text-white text-[10px] font-bold uppercase tracking-wider text-center">
                     <th rowSpan={3} className="p-3 border border-emerald-900 text-left w-12">NO</th>
                     <th rowSpan={3} className="p-3 border border-emerald-900 text-left min-w-[120px]">NAMA JORONG</th>
-                    <th colSpan={11} className="p-2 border border-emerald-900">PENDIDIKAN KETERAMPILAN</th>
+                    <th colSpan={15} className="p-2 border border-emerald-900">PENDIDIKAN KETERAMPILAN</th>
                     <th colSpan={10} className="p-2 border border-emerald-900">PENGEMBANGAN KEHIDUPAN BERKOPERASI / UP2K PKK</th>
                     <th colSpan={4} className="p-2 border border-emerald-900">KOPERASI</th>
                     <th rowSpan={3} className="p-3 border border-emerald-900">KETERANGAN &amp; AKSI</th>
                   </tr>
                   <tr className="bg-[#004e38] text-white text-[9px] font-bold text-center">
-                    <th colSpan={2} className="p-2 border border-emerald-950">KLP. BELAJAR PAKET A</th>
-                    <th colSpan={2} className="p-2 border border-emerald-950">KLP. BELAJAR PAKET B</th>
-                    <th colSpan={2} className="p-2 border border-emerald-950">KLP. BELAJAR PAKET C</th>
-                    <th rowSpan={2} className="p-2 border border-emerald-950">TAMAN BACAAN /<br/>KLP PEMBACA</th>
+                    <th colSpan={3} className="p-2 border border-emerald-950">KLP. BELAJAR PAKET A</th>
+                    <th colSpan={3} className="p-2 border border-emerald-950">KLP. BELAJAR PAKET B</th>
+                    <th colSpan={3} className="p-2 border border-emerald-950">KLP. BELAJAR PAKET C</th>
+                    <th rowSpan={2} className="p-2 border border-emerald-950">TAMAN BACAAN</th>
+                    <th rowSpan={2} className="p-2 border border-emerald-950">KELOMPOK PEMBACA</th>
                     <th rowSpan={2} className="p-2 border border-emerald-950">RUMAH DILAN</th>
                     <th rowSpan={2} className="p-2 border border-emerald-950">KAMPUNG MANDIRI</th>
                     <th colSpan={2} className="p-2 border border-emerald-950">KADER KHUSUS</th>
@@ -349,11 +354,14 @@ function PokjaAdmin({
                   </tr>
                   <tr className="bg-[#004230] text-white text-[8px] font-bold text-center">
                     <th className="p-1 border border-emerald-950">JML KLP</th>
-                    <th className="p-1 border border-emerald-950">WRG BELAJAR</th>
+                    <th className="p-1 border border-emerald-950">A</th>
+                    <th className="p-1 border border-emerald-950">B</th>
                     <th className="p-1 border border-emerald-950">JML KLP</th>
-                    <th className="p-1 border border-emerald-950">WRG BELAJAR</th>
+                    <th className="p-1 border border-emerald-950">A</th>
+                    <th className="p-1 border border-emerald-950">B</th>
                     <th className="p-1 border border-emerald-950">JML KLP</th>
-                    <th className="p-1 border border-emerald-950">WRG BELAJAR</th>
+                    <th className="p-1 border border-emerald-950">A</th>
+                    <th className="p-1 border border-emerald-950">B</th>
                     <th className="p-1 border border-emerald-950">KETERAMPILAN</th>
                     <th className="p-1 border border-emerald-950">KOPERASI</th>
                     <th className="p-1 border border-emerald-950">KELP</th>
@@ -373,7 +381,7 @@ function PokjaAdmin({
                 <tbody className="divide-y divide-gray-150 font-medium text-center text-gray-700 bg-white">
                   {dataPokja2.length === 0 ? (
                     <tr>
-                      <td colSpan={28} className="p-8 text-center text-gray-400 font-bold italic bg-gray-50">Belum ada data jorong. Silakan klik "+ Tambah Rekap Jorong".</td>
+                      <td colSpan={32} className="p-8 text-center text-gray-400 font-bold italic bg-gray-50">Belum ada data jorong. Silakan klik "+ Tambah Rekap Jorong".</td>
                     </tr>
                   ) : (
                     <>
@@ -382,12 +390,16 @@ function PokjaAdmin({
                           <td className="p-3 border text-left font-bold text-gray-400">{idx + 1}</td>
                           <td className="p-3 border text-left font-bold text-gray-900 bg-gray-50/30">{item.jorong || item.nama_jorong}</td>
                           <td className="p-3 border">{item.paket_a_kelompok || 0}</td>
-                          <td className="p-3 border">{item.paket_a_warga_belajar || 0}</td>
+                          <td className="p-3 border">{item.paket_a_warga_belajar_a || 0}</td>
+                          <td className="p-3 border">{item.paket_a_warga_belajar_b || 0}</td>
                           <td className="p-3 border">{item.paket_b_kelompok || 0}</td>
-                          <td className="p-3 border">{item.paket_b_warga_belajar || 0}</td>
+                          <td className="p-3 border">{item.paket_b_warga_belajar_a || 0}</td>
+                          <td className="p-3 border">{item.paket_b_warga_belajar_b || 0}</td>
                           <td className="p-3 border">{item.paket_c_kelompok || 0}</td>
-                          <td className="p-3 border">{item.paket_c_warga_belajar || 0}</td>
-                          <td className="p-3 border text-emerald-800 font-bold">{item.taman_bacaan_perpustakaan_kelompok_pembaca || 0}</td>
+                          <td className="p-3 border">{item.paket_c_warga_belajar_a || 0}</td>
+                          <td className="p-3 border">{item.paket_c_warga_belajar_b || 0}</td>
+                          <td className="p-3 border">{item.taman_bacaan || 0}</td>
+                          <td className="p-3 border text-emerald-800 font-bold">{item.kelompok_pembaca || 0}</td>
                           <td className="p-3 border">{item.rumah_dilan || 0}</td>
                           <td className="p-3 border">{item.kampung_mandiri || 0}</td>
                           <td className="p-3 border">{item.kader_khusus_keterampilan || 0}</td>
@@ -417,12 +429,16 @@ function PokjaAdmin({
                       <tr className="bg-emerald-50/60 font-bold border-t-2 border-emerald-800 text-center text-gray-900">
                         <td colSpan={2} className="p-3 border text-left">JUMLAH (TOTAL)</td>
                         <td className="p-3 border">{sumData(dataPokja2, 'paket_a_kelompok')}</td>
-                        <td className="p-3 border">{sumData(dataPokja2, 'paket_a_warga_belajar')}</td>
+                        <td className="p-3 border">{sumData(dataPokja2, 'paket_a_warga_belajar_a')}</td>
+                        <td className="p-3 border">{sumData(dataPokja2, 'paket_a_warga_belajar_b')}</td>
                         <td className="p-3 border">{sumData(dataPokja2, 'paket_b_kelompok')}</td>
-                        <td className="p-3 border">{sumData(dataPokja2, 'paket_b_warga_belajar')}</td>
+                        <td className="p-3 border">{sumData(dataPokja2, 'paket_b_warga_belajar_a')}</td>
+                        <td className="p-3 border">{sumData(dataPokja2, 'paket_b_warga_belajar_b')}</td>
                         <td className="p-3 border">{sumData(dataPokja2, 'paket_c_kelompok')}</td>
-                        <td className="p-3 border">{sumData(dataPokja2, 'paket_c_warga_belajar')}</td>
-                        <td className="p-3 border font-extrabold text-emerald-900 bg-emerald-100/50">{sumData(dataPokja2, 'taman_bacaan_perpustakaan_kelompok_pembaca')}</td>
+                        <td className="p-3 border">{sumData(dataPokja2, 'paket_c_warga_belajar_a')}</td>
+                        <td className="p-3 border">{sumData(dataPokja2, 'paket_c_warga_belajar_b')}</td>
+                        <td className="p-3 border">{sumData(dataPokja2, 'taman_bacaan')}</td>
+                        <td className="p-3 border font-extrabold text-emerald-900 bg-emerald-100/50">{sumData(dataPokja2, 'kelompok_pembaca')}</td>
                         <td className="p-3 border">{sumData(dataPokja2, 'rumah_dilan')}</td>
                         <td className="p-3 border">{sumData(dataPokja2, 'kampung_mandiri')}</td>
                         <td className="p-3 border">{sumData(dataPokja2, 'kader_khusus_keterampilan')}</td>
@@ -1035,10 +1051,6 @@ function PokjaAdmin({
                         <label className="block text-[10px] font-bold text-gray-500 mb-1">Kader Pola Asuh</label>
                         <input type="number" value={formData.kader_pola_asuh || 0} onChange={(e) => setFormData({ ...formData, kader_pola_asuh: parseInt(e.target.value) || 0 })} className="w-full border rounded p-2 text-xs" />
                       </div>
-                      <div>
-                        <label className="block text-[10px] font-bold text-gray-500 mb-1">Kader Lansia</label>
-                        <input type="number" value={formData.kader_lansia || 0} onChange={(e) => setFormData({ ...formData, kader_lansia: parseInt(e.target.value) || 0 })} className="w-full border rounded p-2 text-xs" />
-                      </div>
                       <div className="col-span-2 md:col-span-3 border-t pt-3">
                         <span className="block text-[10px] font-bold text-emerald-800 uppercase tracking-wider mb-2">Simulasi (Jumlah Kelompok &amp; Anggota)</span>
                       </div>
@@ -1065,6 +1077,14 @@ function PokjaAdmin({
                       <div>
                         <label className="block text-[10px] font-bold text-gray-500 mb-1">Simulasi Pola Asuh Anggota</label>
                         <input type="number" value={formData.simulasi_pola_asuh_jml_anggota || 0} onChange={(e) => setFormData({ ...formData, simulasi_pola_asuh_jml_anggota: parseInt(e.target.value) || 0 })} className="w-full border rounded p-2 text-xs" />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-bold text-gray-500 mb-1">Lansia Kelompok</label>
+                        <input type="number" value={formData.simulasi_lansia_jml_kelompok || 0} onChange={(e) => setFormData({ ...formData, simulasi_lansia_jml_kelompok: parseInt(e.target.value) || 0 })} className="w-full border rounded p-2 text-xs" />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-bold text-gray-500 mb-1">Lansia Anggota</label>
+                        <input type="number" value={formData.simulasi_lansia_jml_anggota || 0} onChange={(e) => setFormData({ ...formData, simulasi_lansia_jml_anggota: parseInt(e.target.value) || 0 })} className="w-full border rounded p-2 text-xs" />
                       </div>
                       <div className="col-span-2 md:col-span-3 border-t pt-3">
                         <span className="block text-[10px] font-bold text-emerald-800 uppercase tracking-wider mb-2">Gotong Royong</span>
@@ -1106,28 +1126,44 @@ function PokjaAdmin({
                         <input type="number" value={formData.paket_a_kelompok || 0} onChange={(e) => setFormData({ ...formData, paket_a_kelompok: parseInt(e.target.value) || 0 })} className="w-full border rounded p-2 text-xs" />
                       </div>
                       <div>
-                        <label className="block text-[10px] font-bold text-gray-500 mb-1">Paket A Warga Belajar</label>
-                        <input type="number" value={formData.paket_a_warga_belajar || 0} onChange={(e) => setFormData({ ...formData, paket_a_warga_belajar: parseInt(e.target.value) || 0 })} className="w-full border rounded p-2 text-xs" />
+                        <label className="block text-[10px] font-bold text-gray-500 mb-1">Paket A Warga Belajar A</label>
+                        <input type="number" value={formData.paket_a_warga_belajar_a || 0} onChange={(e) => setFormData({ ...formData, paket_a_warga_belajar_a: parseInt(e.target.value) || 0 })} className="w-full border rounded p-2 text-xs" />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-bold text-gray-500 mb-1">Paket A Warga Belajar B</label>
+                        <input type="number" value={formData.paket_a_warga_belajar_b || 0} onChange={(e) => setFormData({ ...formData, paket_a_warga_belajar_b: parseInt(e.target.value) || 0 })} className="w-full border rounded p-2 text-xs" />
                       </div>
                       <div>
                         <label className="block text-[10px] font-bold text-gray-500 mb-1">Paket B Kelompok</label>
                         <input type="number" value={formData.paket_b_kelompok || 0} onChange={(e) => setFormData({ ...formData, paket_b_kelompok: parseInt(e.target.value) || 0 })} className="w-full border rounded p-2 text-xs" />
                       </div>
                       <div>
-                        <label className="block text-[10px] font-bold text-gray-500 mb-1">Paket B Warga Belajar</label>
-                        <input type="number" value={formData.paket_b_warga_belajar || 0} onChange={(e) => setFormData({ ...formData, paket_b_warga_belajar: parseInt(e.target.value) || 0 })} className="w-full border rounded p-2 text-xs" />
+                        <label className="block text-[10px] font-bold text-gray-500 mb-1">Paket B Warga Belajar A</label>
+                        <input type="number" value={formData.paket_b_warga_belajar_a || 0} onChange={(e) => setFormData({ ...formData, paket_b_warga_belajar_a: parseInt(e.target.value) || 0 })} className="w-full border rounded p-2 text-xs" />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-bold text-gray-500 mb-1">Paket B Warga Belajar B</label>
+                        <input type="number" value={formData.paket_b_warga_belajar_b || 0} onChange={(e) => setFormData({ ...formData, paket_b_warga_belajar_b: parseInt(e.target.value) || 0 })} className="w-full border rounded p-2 text-xs" />
                       </div>
                       <div>
                         <label className="block text-[10px] font-bold text-gray-500 mb-1">Paket C Kelompok</label>
                         <input type="number" value={formData.paket_c_kelompok || 0} onChange={(e) => setFormData({ ...formData, paket_c_kelompok: parseInt(e.target.value) || 0 })} className="w-full border rounded p-2 text-xs" />
                       </div>
                       <div>
-                        <label className="block text-[10px] font-bold text-gray-500 mb-1">Paket C Warga Belajar</label>
-                        <input type="number" value={formData.paket_c_warga_belajar || 0} onChange={(e) => setFormData({ ...formData, paket_c_warga_belajar: parseInt(e.target.value) || 0 })} className="w-full border rounded p-2 text-xs" />
+                        <label className="block text-[10px] font-bold text-gray-500 mb-1">Paket C Warga Belajar A</label>
+                        <input type="number" value={formData.paket_c_warga_belajar_a || 0} onChange={(e) => setFormData({ ...formData, paket_c_warga_belajar_a: parseInt(e.target.value) || 0 })} className="w-full border rounded p-2 text-xs" />
                       </div>
                       <div>
-                        <label className="block text-[10px] font-bold text-gray-500 mb-1">Taman Bacaan / Kelompok Pembaca</label>
-                        <input type="number" value={formData.taman_bacaan_perpustakaan_kelompok_pembaca || 0} onChange={(e) => setFormData({ ...formData, taman_bacaan_perpustakaan_kelompok_pembaca: parseInt(e.target.value) || 0 })} className="w-full border rounded p-2 text-xs" />
+                        <label className="block text-[10px] font-bold text-gray-500 mb-1">Paket C Warga Belajar B</label>
+                        <input type="number" value={formData.paket_c_warga_belajar_b || 0} onChange={(e) => setFormData({ ...formData, paket_c_warga_belajar_b: parseInt(e.target.value) || 0 })} className="w-full border rounded p-2 text-xs" />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-bold text-gray-500 mb-1">Taman Bacaan</label>
+                        <input type="number" value={formData.taman_bacaan || 0} onChange={(e) => setFormData({ ...formData, taman_bacaan: parseInt(e.target.value) || 0 })} className="w-full border rounded p-2 text-xs" />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-bold text-gray-500 mb-1">Kelompok Pembaca</label>
+                        <input type="number" value={formData.kelompok_pembaca || 0} onChange={(e) => setFormData({ ...formData, kelompok_pembaca: parseInt(e.target.value) || 0 })} className="w-full border rounded p-2 text-xs" />
                       </div>
                       <div>
                         <label className="block text-[10px] font-bold text-gray-500 mb-1">Rumah DILAN</label>

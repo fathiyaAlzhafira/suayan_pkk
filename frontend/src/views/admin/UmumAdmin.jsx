@@ -180,7 +180,7 @@ function UmumAdmin({ dataUmumJorong, setDataUmumJorong, API_URL }) {
 
         <button 
           onClick={handleOpenAdd}
-          className="bg-[#005941] hover:bg-[#004230] text-white text-xs font-bold px-4 py-2.5 rounded-lg transition shadow flex items-center gap-1.5"
+          className="bg-[#005941] hover:bg-[#004230] text-white text-xs font-bold px-4 py-2.5 rounded-lg transition shadow-sm flex items-center gap-1.5"
         >
           <span>+ Tambah Rekap Data Umum</span>
         </button>
@@ -199,38 +199,47 @@ function UmumAdmin({ dataUmumJorong, setDataUmumJorong, API_URL }) {
             <thead>
               {/* Row 1 Header Makro */}
               <tr className="bg-[#005941] text-white text-[10px] font-bold uppercase tracking-wider text-center">
-                <th rowSpan={2} className="p-2 border border-emerald-950 w-8">NO</th>
-                <th rowSpan={2} className="p-2 border border-emerald-950 text-left min-w-[130px]">NAMA JORONG</th>
+                <th rowSpan={3} className="p-2 border border-emerald-950 w-8">NO</th>
+                <th rowSpan={3} className="p-2 border border-emerald-950 text-left min-w-[130px]">NAMA JORONG</th>
                 <th colSpan={2} className="p-2 border border-emerald-950">JML KELOMPOK</th>
-                <th colSpan={4} className="p-2 border border-emerald-950">JUMLAH</th>
-                <th colSpan={2} className="p-2 border border-emerald-950">ANGGOTA TP PKK</th>
-                <th colSpan={4} className="p-2 border border-emerald-950">JUMLAH KADER</th>
+                <th colSpan={2} className="p-2 border border-emerald-950">JUMLAH</th>
+                <th colSpan={2} className="p-2 border border-emerald-950">JUMLAH JIWA</th>
+                <th colSpan={6} className="p-2 border border-emerald-950">JUMLAH KADER</th>
                 <th colSpan={4} className="p-2 border border-emerald-950">JUMLAH TENAGA</th>
-                <th rowSpan={2} className="p-2 border border-emerald-950 text-left">KET</th>
-                <th rowSpan={2} className="p-2 border border-emerald-950 text-left w-24">AKSI</th>
+                <th rowSpan={3} className="p-2 border border-emerald-950 text-left">KET</th>
+                <th rowSpan={3} className="p-2 border border-emerald-950 text-center w-24">AKSI</th>
               </tr>
 
               {/* Row 2 Sub-Header Mikro */}
               <tr className="bg-[#004e38] text-white text-[9px] font-bold text-center">
-                <th className="p-1.5 border border-emerald-950">JORONG</th>
-                <th className="p-1.5 border border-emerald-950">DASAWISMA</th>
-                <th className="p-1.5 border border-emerald-950">KRT</th>
-                <th className="p-1.5 border border-emerald-950">KK</th>
-                <th className="p-1.5 border border-emerald-950">L</th>
-                <th className="p-1.5 border border-emerald-950">P</th>
-                <th className="p-1.5 border border-emerald-950">L</th>
-                <th className="p-1.5 border border-emerald-950">P</th>
-                <th className="p-1.5 border border-emerald-950 bg-emerald-900/60">UMUM L</th>
-                <th className="p-1.5 border border-emerald-950 bg-emerald-900/60">UMUM P</th>
-                <th className="p-1.5 border border-emerald-950 bg-teal-900/60">KHUSUS L</th>
-                <th className="p-1.5 border border-emerald-950 bg-teal-900/60">KHUSUS P</th>
-                <th className="p-1.5 border border-emerald-950">HONORER L</th>
-                <th className="p-1.5 border border-emerald-950">HONORER P</th>
-                <th className="p-1.5 border border-emerald-950">BANTUAN L</th>
-                <th className="p-1.5 border border-emerald-950">BANTUAN P</th>
+                <th rowSpan={2} className="p-1.5 border border-emerald-950">JORONG</th>
+                <th rowSpan={2} className="p-1.5 border border-emerald-950">DASAWISMA</th>
+                <th rowSpan={2} className="p-1.5 border border-emerald-950">KRT</th>
+                <th rowSpan={2} className="p-1.5 border border-emerald-950">KK</th>
+                <th rowSpan={2} className="p-1.5 border border-emerald-950">L</th>
+                <th rowSpan={2} className="p-1.5 border border-emerald-950">P</th>
+                <th colSpan={2} className="p-1.5 border border-emerald-950 bg-emerald-900/40">ANGGOTA TP PKK</th>
+                <th colSpan={2} className="p-1.5 border border-emerald-950 bg-emerald-900/60">UMUM</th>
+                <th colSpan={2} className="p-1.5 border border-emerald-950 bg-teal-900/60">KHUSUS</th>
+                <th colSpan={2} className="p-1.5 border border-emerald-950">HONORER</th>
+                <th colSpan={2} className="p-1.5 border border-emerald-950">BANTUAN</th>
               </tr>
 
-              {/* Row 3 Penomoran Kolom 1 s.d 21 */}
+              {/* Row 3 Sub-Header Mikro 2 (L / P) */}
+              <tr className="bg-[#003b2a] text-white text-[9px] font-bold text-center">
+                <th className="p-1 border border-emerald-950 bg-emerald-900/50">L</th>
+                <th className="p-1 border border-emerald-950 bg-emerald-900/50">P</th>
+                <th className="p-1 border border-emerald-950 bg-emerald-900/70">L</th>
+                <th className="p-1 border border-emerald-950 bg-emerald-900/70">P</th>
+                <th className="p-1 border border-emerald-950 bg-teal-900/70">L</th>
+                <th className="p-1 border border-emerald-950 bg-teal-900/70">P</th>
+                <th className="p-1 border border-emerald-950">L</th>
+                <th className="p-1 border border-emerald-950">P</th>
+                <th className="p-1 border border-emerald-950">L</th>
+                <th className="p-1 border border-emerald-950">P</th>
+              </tr>
+
+              {/* Row 4 Penomoran Kolom 1 s.d 21 */}
               <tr className="bg-gray-100 text-gray-900 text-[10px] font-extrabold uppercase tracking-wider text-center border-b border-gray-400">
                 <th className="p-1 border border-gray-300">1</th>
                 <th className="p-1 border border-gray-300">2</th>
@@ -255,7 +264,7 @@ function UmumAdmin({ dataUmumJorong, setDataUmumJorong, API_URL }) {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 font-medium text-gray-800 text-center bg-white">
-              {dataUmumJorong.length === 0 ? (
+              {dataGeneralLength() === 0 ? (
                 <tr>
                   <td colSpan={20} className="p-8 text-center text-gray-400 font-bold italic bg-gray-50">
                     Belum ada rekap Data Umum PKK. Silakan klik "+ Tambah Rekap Data Umum".
@@ -282,8 +291,8 @@ function UmumAdmin({ dataUmumJorong, setDataUmumJorong, API_URL }) {
                       <td className="p-2 border text-gray-700 font-semibold">{kk}</td>
                       <td className="p-2 border text-gray-700">{jl}</td>
                       <td className="p-2 border text-gray-700">{jp}</td>
-                      <td className="p-2 border font-semibold">{al}</td>
-                      <td className="p-2 border font-semibold">{ap}</td>
+                      <td className="p-2 border bg-emerald-50/20 font-semibold">{al}</td>
+                      <td className="p-2 border bg-emerald-50/20 font-semibold">{ap}</td>
                       <td className="p-2 border bg-emerald-50/30 text-emerald-800 font-bold">{item.kader_umum_l || 0}</td>
                       <td className="p-2 border bg-emerald-50/30 text-emerald-800 font-bold">{item.kader_umum_p || 0}</td>
                       <td className="p-2 border bg-teal-50/30 text-teal-800 font-bold">{item.kader_khusus_l || 0}</td>
@@ -308,18 +317,18 @@ function UmumAdmin({ dataUmumJorong, setDataUmumJorong, API_URL }) {
                 <td colSpan={2} className="p-2.5 border border-emerald-950 text-center uppercase tracking-wider">
                   TP PKK NAGARI / JUMLAH
                 </td>
-                <td className="p-2 border border-emerald-950">{dataUmumJorong.length}</td>
+                <td className="p-2 border border-emerald-950">{dataGeneralLength()}</td>
                 <td className="p-2 border border-emerald-950 text-emerald-200">{total.dasawisma}</td>
                 <td className="p-2 border border-emerald-950">{total.krt}</td>
                 <td className="p-2 border border-emerald-950 text-emerald-200">{total.kk}</td>
                 <td className="p-2 border border-emerald-950">{total.jiwa_l}</td>
                 <td className="p-2 border border-emerald-950">{total.jiwa_p}</td>
-                <td className="p-2 border border-emerald-950">{total.anggota_l}</td>
-                <td className="p-2 border border-emerald-950">{total.anggota_p}</td>
-                <td className="p-2 border border-emerald-950 text-emerald-200">{total.kader_umum_l}</td>
-                <td className="p-2 border border-emerald-950 text-emerald-200">{total.kader_umum_p}</td>
-                <td className="p-2 border border-emerald-950 text-teal-200">{total.kader_khusus_l}</td>
-                <td className="p-2 border border-emerald-950 text-teal-200">{total.kader_khusus_p}</td>
+                <td className="p-2 border border-emerald-950 bg-emerald-900/40">{total.anggota_l}</td>
+                <td className="p-2 border border-emerald-950 bg-emerald-900/40">{total.anggota_p}</td>
+                <td className="p-2 border border-emerald-950 text-emerald-200 bg-emerald-900/60">{total.kader_umum_l}</td>
+                <td className="p-2 border border-emerald-950 text-emerald-200 bg-emerald-900/60">{total.kader_umum_p}</td>
+                <td className="p-2 border border-emerald-950 text-teal-200 bg-teal-900/60">{total.kader_khusus_l}</td>
+                <td className="p-2 border border-emerald-950 text-teal-200 bg-teal-900/60">{total.kader_khusus_p}</td>
                 <td className="p-2 border border-emerald-950">{total.tenaga_honorer_l}</td>
                 <td className="p-2 border border-emerald-950">{total.tenaga_honorer_p}</td>
                 <td className="p-2 border border-emerald-950">{total.tenaga_bantuan_l}</td>
@@ -445,8 +454,8 @@ function UmumAdmin({ dataUmumJorong, setDataUmumJorong, API_URL }) {
               </div>
 
               <div className="pt-4 flex space-x-2 border-t mt-4">
-                <button type="button" onClick={() => setIsModalOpen(false)} className="flex-1 border text-gray-500 font-bold py-2 rounded">Batal</button>
-                <button type="submit" className="flex-1 bg-[#005941] hover:bg-[#004230] text-white font-bold py-2 rounded shadow">Simpan</button>
+                <button type="button" onClick={() => setIsModalOpen(false)} className="flex-1 border text-gray-500 font-bold py-2 rounded font-sans">Batal</button>
+                <button type="submit" className="flex-1 bg-[#005941] hover:bg-[#004230] text-white font-bold py-2 rounded shadow font-sans">Simpan</button>
               </div>
             </form>
           </div>
@@ -454,6 +463,10 @@ function UmumAdmin({ dataUmumJorong, setDataUmumJorong, API_URL }) {
       )}
     </div>
   );
+
+  function dataGeneralLength() {
+    return dataUmumJorong.length;
+  }
 }
 
 export default UmumAdmin;

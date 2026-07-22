@@ -5,47 +5,29 @@ function KegiatanAdmin({ dataKegiatan, setDataKegiatan, API_URL }) {
   const [modalType, setModalType] = useState('add');
   const [editId, setEditId] = useState(null);
 
-  const STANDARD_KATEGORI = ['Rapat', 'Penyuluhan', 'Pelatihan', 'Kunjungan', 'Gotong Royong'];
-
   const [formData, setFormData] = useState({
-    nama: '', jabatan: '', tanggal: '', tempat: '', uraian_kegiatan: '', kategori: 'Rapat'
+    nama: '', jabatan: '', tanggal: '', tempat: '', uraian_kegiatan: ''
   });
-  const [isLainnya, setIsLainnya] = useState(false);
-  const [customKategori, setCustomKategori] = useState('');
 
   const handleOpenAdd = () => {
     setModalType('add');
     setEditId(null);
     setFormData({
-      nama: '', jabatan: '', tanggal: '', tempat: '', uraian_kegiatan: '', kategori: 'Rapat'
+      nama: '', jabatan: '', tanggal: '', tempat: '', uraian_kegiatan: ''
     });
-    setIsLainnya(false);
-    setCustomKategori('');
     setIsModalOpen(true);
   };
 
   const handleOpenEdit = (item) => {
     setModalType('edit');
     setEditId(item.id);
-    const kat = item.kategori || 'Rapat';
-    const isCustom = !STANDARD_KATEGORI.includes(kat);
-
     setFormData({
-      nama: item.nama,
-      jabatan: item.jabatan,
+      nama: item.nama || '',
+      jabatan: item.jabatan || '',
       tanggal: item.tanggal ? item.tanggal.substring(0, 10) : '',
-      tempat: item.tempat,
-      uraian_kegiatan: item.uraian_kegiatan,
-      kategori: kat
+      tempat: item.tempat || '',
+      uraian_kegiatan: item.uraian_kegiatan || ''
     });
-
-    if (isCustom) {
-      setIsLainnya(true);
-      setCustomKategori(kat === 'Lainnya' ? '' : kat);
-    } else {
-      setIsLainnya(false);
-      setCustomKategori('');
-    }
     setIsModalOpen(true);
   };
 
@@ -69,12 +51,7 @@ function KegiatanAdmin({ dataKegiatan, setDataKegiatan, API_URL }) {
     const url = modalType === 'add' ? `${API_URL}/kegiatan` : `${API_URL}/kegiatan/${editId}`;
     const method = modalType === 'add' ? 'POST' : 'PUT';
     
-    let finalKategori = formData.kategori;
-    if (isLainnya) {
-      finalKategori = customKategori.trim() || 'Lainnya';
-    }
-
-    let bodyData = { ...formData, kategori: finalKategori };
+    let bodyData = { ...formData };
     if (modalType === 'add') {
       bodyData.foto = "https://images.unsplash.com/photo-1531538606174-0f90ff5dce83?auto=format&fit=crop&q=80&w=400";
     }
@@ -110,23 +87,6 @@ function KegiatanAdmin({ dataKegiatan, setDataKegiatan, API_URL }) {
     }
   };
 
-  const handleKategoriSelectChange = (e) => {
-    const val = e.target.value;
-    if (val === 'Lainnya') {
-      setIsLainnya(true);
-      setFormData({ ...formData, kategori: customKategori || 'Lainnya' });
-    } else {
-      setIsLainnya(false);
-      setFormData({ ...formData, kategori: val });
-    }
-  };
-
-  const handleCustomKategoriChange = (e) => {
-    const val = e.target.value;
-    setCustomKategori(val);
-    setFormData({ ...formData, kategori: val || 'Lainnya' });
-  };
-
   return (
     <div className="space-y-6 font-sans">
       {/* Header Panel Card */}
@@ -143,6 +103,7 @@ function KegiatanAdmin({ dataKegiatan, setDataKegiatan, API_URL }) {
         </button>
       </div>
 
+      {/* Tabel Data Catatan Kegiatan */}
       <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden text-xs">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse border border-gray-200">
@@ -153,7 +114,6 @@ function KegiatanAdmin({ dataKegiatan, setDataKegiatan, API_URL }) {
                 <th rowSpan={2} className="p-3 border border-emerald-900 text-left">NAMA</th>
                 <th rowSpan={2} className="p-3 border border-emerald-900 text-left">JABATAN</th>
                 <th colSpan={3} className="p-2 border border-emerald-900">KEGIATAN</th>
-                <th rowSpan={2} className="p-3 border border-emerald-900">KATEGORI / KETERANGAN</th>
                 <th rowSpan={2} className="p-3 border border-emerald-900 text-left w-24">AKSI</th>
               </tr>
               {/* Row 2 Header Sub-kolom KEGIATAN */}
@@ -166,8 +126,8 @@ function KegiatanAdmin({ dataKegiatan, setDataKegiatan, API_URL }) {
             <tbody className="divide-y divide-gray-150 font-medium text-center text-gray-700 bg-white">
               {dataKegiatan.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="p-8 text-center text-gray-400 font-bold italic bg-gray-50">
-                    Belum ada data catatan kegiatan. Silakan klik "+ Catat Kegiatan Baru".
+                  <td colSpan={7} className="p-8 text-center text-gray-400 font-bold italic bg-gray-50">
+                    Belum ada data catatan kegiatan. Silakan klik "+ Tambah Kegiatan PKK".
                   </td>
                 </tr>
               ) : (
@@ -183,11 +143,6 @@ function KegiatanAdmin({ dataKegiatan, setDataKegiatan, API_URL }) {
                     <td className="p-3 border text-left text-gray-600 text-[11px] leading-relaxed max-w-sm">
                       {item.uraian_kegiatan}
                     </td>
-                    <td className="p-3 border">
-                      <span className="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold text-[10px]">
-                        {item.kategori || 'Rapat'}
-                      </span>
-                    </td>
                     <td className="p-3 border text-left flex items-center gap-3">
                       <button onClick={() => handleOpenEdit(item)} className="text-[#005941] hover:underline font-bold">Edit</button>
                       <button onClick={() => handleDelete(item.id)} className="text-red-500 hover:underline font-bold">Hapus</button>
@@ -200,6 +155,7 @@ function KegiatanAdmin({ dataKegiatan, setDataKegiatan, API_URL }) {
         </div>
       </div>
 
+      {/* Editor Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-emerald-950/45 backdrop-blur-sm">
           <div className="bg-white rounded-xl border border-gray-100 shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200">
@@ -269,36 +225,6 @@ function KegiatanAdmin({ dataKegiatan, setDataKegiatan, API_URL }) {
                     ></textarea>
                   </div>
                 </div>
-              </div>
-
-              <div>
-                <label className="block text-[10px] font-bold text-gray-500 mb-1">Kategori / Keterangan</label>
-                <select 
-                  value={isLainnya ? 'Lainnya' : (formData.kategori || 'Rapat')} 
-                  onChange={handleKategoriSelectChange} 
-                  className="w-full border rounded p-2 text-xs bg-white text-gray-800 mb-2"
-                >
-                  <option value="Rapat">Rapat</option>
-                  <option value="Penyuluhan">Penyuluhan</option>
-                  <option value="Pelatihan">Pelatihan</option>
-                  <option value="Kunjungan">Kunjungan</option>
-                  <option value="Gotong Royong">Gotong Royong</option>
-                  <option value="Lainnya">Lainnya (Ketik Manual)</option>
-                </select>
-
-                {isLainnya && (
-                  <div className="animate-in fade-in zoom-in-95 duration-150">
-                    <label className="block text-[9px] font-bold text-emerald-800 mb-1">Ketik Kategori / Keterangan Lainnya:</label>
-                    <input 
-                      type="text" 
-                      value={customKategori} 
-                      onChange={handleCustomKategoriChange} 
-                      placeholder="Contoh: Lomba Dasa Wisma / Sosialisasi"
-                      className="w-full border border-emerald-600 rounded p-2 text-xs text-gray-800 bg-emerald-50/30 focus:outline-none focus:ring-1 focus:ring-emerald-700" 
-                      required={isLainnya}
-                    />
-                  </div>
-                )}
               </div>
 
               <div className="pt-4 flex space-x-2 border-t mt-4">

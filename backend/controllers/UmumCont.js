@@ -70,10 +70,11 @@ exports.getPokja = async (req, res) => {
       queryStr = `
         SELECT 
           id, nama_jorong AS jorong,
-          kader_pkbn, kader_pkdrt, kader_pola_asuh, kader_lansia,
+          kader_pkbn, kader_pkdrt, kader_pola_asuh,
           simulasi_pkbn_jml_kelompok, simulasi_pkbn_jml_anggota,
           simulasi_pkdrt_jml_kelompok, simulasi_pkdrt_jml_anggota,
           simulasi_pola_asuh_jml_kelompok, simulasi_pola_asuh_jml_anggota,
+          simulasi_lansia_jml_kelompok, simulasi_lansia_jml_anggota,
           gotong_royong_kerja_bakti_jml_anggota, gotong_royong_rukun_kematian_jml_kelompok,
           gotong_royong_keagamaan_jml_anggota, gotong_royong_jimpitan, gotong_royong_arisan,
           keterangan
@@ -82,10 +83,10 @@ exports.getPokja = async (req, res) => {
       queryStr = `
         SELECT 
           id, nama_jorong AS jorong,
-          paket_a_kelompok, paket_a_warga_belajar,
-          paket_b_kelompok, paket_b_warga_belajar,
-          paket_c_kelompok, paket_c_warga_belajar,
-          taman_bacaan_perpustakaan_kelompok_pembaca, rumah_dilan, kampung_mandiri,
+          paket_a_kelompok, paket_a_warga_belajar_a, paket_a_warga_belajar_b,
+          paket_b_kelompok, paket_b_warga_belajar_a, paket_b_warga_belajar_b,
+          paket_c_kelompok, paket_c_warga_belajar_a, paket_c_warga_belajar_b,
+          taman_bacaan, kelompok_pembaca, rumah_dilan, kampung_mandiri,
           kader_khusus_keterampilan, kader_khusus_koperasi,
           up2k_pemula_kelompok, up2k_pemula_peserta,
           up2k_madya_kelompok, up2k_madya_peserta,
@@ -136,10 +137,11 @@ exports.updatePokja = async (req, res) => {
   try {
     if (id == 1) {
       const {
-        kader_pkbn, kader_pkdrt, kader_pola_asuh, kader_lansia,
+        kader_pkbn, kader_pkdrt, kader_pola_asuh,
         simulasi_pkbn_jml_kelompok, simulasi_pkbn_jml_anggota,
         simulasi_pkdrt_jml_kelompok, simulasi_pkdrt_jml_anggota,
         simulasi_pola_asuh_jml_kelompok, simulasi_pola_asuh_jml_anggota,
+        simulasi_lansia_jml_kelompok, simulasi_lansia_jml_anggota,
         gotong_royong_kerja_bakti_jml_anggota, gotong_royong_rukun_kematian_jml_kelompok,
         gotong_royong_keagamaan_jml_anggota, gotong_royong_jimpitan, gotong_royong_arisan,
         keterangan
@@ -147,19 +149,21 @@ exports.updatePokja = async (req, res) => {
 
       await db.query(
         `UPDATE pokja_1 SET 
-          kader_pkbn=?, kader_pkdrt=?, kader_pola_asuh=?, kader_lansia=?,
+          kader_pkbn=?, kader_pkdrt=?, kader_pola_asuh=?,
           simulasi_pkbn_jml_kelompok=?, simulasi_pkbn_jml_anggota=?,
           simulasi_pkdrt_jml_kelompok=?, simulasi_pkdrt_jml_anggota=?,
           simulasi_pola_asuh_jml_kelompok=?, simulasi_pola_asuh_jml_anggota=?,
+          simulasi_lansia_jml_kelompok=?, simulasi_lansia_jml_anggota=?,
           gotong_royong_kerja_bakti_jml_anggota=?, gotong_royong_rukun_kematian_jml_kelompok=?,
           gotong_royong_keagamaan_jml_anggota=?, gotong_royong_jimpitan=?, gotong_royong_arisan=?,
           keterangan=?
          WHERE nama_jorong=?`,
         [
-          kader_pkbn || 0, kader_pkdrt || 0, kader_pola_asuh || 0, kader_lansia || 0,
+          kader_pkbn || 0, kader_pkdrt || 0, kader_pola_asuh || 0,
           simulasi_pkbn_jml_kelompok || 0, simulasi_pkbn_jml_anggota || 0,
           simulasi_pkdrt_jml_kelompok || 0, simulasi_pkdrt_jml_anggota || 0,
           simulasi_pola_asuh_jml_kelompok || 0, simulasi_pola_asuh_jml_anggota || 0,
+          simulasi_lansia_jml_kelompok || 0, simulasi_lansia_jml_anggota || 0,
           gotong_royong_kerja_bakti_jml_anggota || 0, gotong_royong_rukun_kematian_jml_kelompok || 0,
           gotong_royong_keagamaan_jml_anggota || 0, gotong_royong_jimpitan || 0, gotong_royong_arisan || 0,
           keterangan || null, jorong
@@ -167,10 +171,10 @@ exports.updatePokja = async (req, res) => {
       );
     } else if (id == 2) {
       const {
-        paket_a_kelompok, paket_a_warga_belajar,
-        paket_b_kelompok, paket_b_warga_belajar,
-        paket_c_kelompok, paket_c_warga_belajar,
-        taman_bacaan_perpustakaan_kelompok_pembaca, rumah_dilan, kampung_mandiri,
+        paket_a_kelompok, paket_a_warga_belajar_a, paket_a_warga_belajar_b,
+        paket_b_kelompok, paket_b_warga_belajar_a, paket_b_warga_belajar_b,
+        paket_c_kelompok, paket_c_warga_belajar_a, paket_c_warga_belajar_b,
+        taman_bacaan, kelompok_pembaca, rumah_dilan, kampung_mandiri,
         kader_khusus_keterampilan, kader_khusus_koperasi,
         up2k_pemula_kelompok, up2k_pemula_peserta,
         up2k_madya_kelompok, up2k_madya_peserta,
@@ -183,10 +187,10 @@ exports.updatePokja = async (req, res) => {
 
       await db.query(
         `UPDATE pokja_2 SET 
-          paket_a_kelompok=?, paket_a_warga_belajar=?,
-          paket_b_kelompok=?, paket_b_warga_belajar=?,
-          paket_c_kelompok=?, paket_c_warga_belajar=?,
-          taman_bacaan_perpustakaan_kelompok_pembaca=?, rumah_dilan=?, kampung_mandiri=?,
+          paket_a_kelompok=?, paket_a_warga_belajar_a=?, paket_a_warga_belajar_b=?,
+          paket_b_kelompok=?, paket_b_warga_belajar_a=?, paket_b_warga_belajar_b=?,
+          paket_c_kelompok=?, paket_c_warga_belajar_a=?, paket_c_warga_belajar_b=?,
+          taman_bacaan=?, kelompok_pembaca=?, rumah_dilan=?, kampung_mandiri=?,
           kader_khusus_keterampilan=?, kader_khusus_koperasi=?,
           up2k_pemula_kelompok=?, up2k_pemula_peserta=?,
           up2k_madya_kelompok=?, up2k_madya_peserta=?,
@@ -197,10 +201,10 @@ exports.updatePokja = async (req, res) => {
           koperasi_berbadan_hukum_jumlah=?, koperasi_berbadan_hukum_anggota=?
          WHERE nama_jorong=?`,
         [
-          paket_a_kelompok || 0, paket_a_warga_belajar || 0,
-          paket_b_kelompok || 0, paket_b_warga_belajar || 0,
-          paket_c_kelompok || 0, paket_c_warga_belajar || 0,
-          taman_bacaan_perpustakaan_kelompok_pembaca || 0, rumah_dilan || 0, kampung_mandiri || 0,
+          paket_a_kelompok || 0, paket_a_warga_belajar_a || 0, paket_a_warga_belajar_b || 0,
+          paket_b_kelompok || 0, paket_b_warga_belajar_a || 0, paket_b_warga_belajar_b || 0,
+          paket_c_kelompok || 0, paket_c_warga_belajar_a || 0, paket_c_warga_belajar_b || 0,
+          taman_bacaan || 0, kelompok_pembaca || 0, rumah_dilan || 0, kampung_mandiri || 0,
           kader_khusus_keterampilan || 0, kader_khusus_koperasi || 0,
           up2k_pemula_kelompok || 0, up2k_pemula_peserta || 0,
           up2k_madya_kelompok || 0, up2k_madya_peserta || 0,

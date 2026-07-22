@@ -37,6 +37,11 @@ async function initDatabase() {
     // 3. Masuk ke database
     await connection.query(`USE \`${dbName}\``);
 
+    // Drop legacy/modified tables so they get recreated with the new schemas
+    await connection.query('SET FOREIGN_KEY_CHECKS = 0');
+    await connection.query('DROP TABLE IF EXISTS pokja_satu, pokja_dua, pokja_tiga, pokja_empat, pokja_1, pokja_2');
+    await connection.query('SET FOREIGN_KEY_CHECKS = 1');
+
     // 4. Baca database.sql untuk membuat tabel bawaan
     const sqlFilePath = path.join(__dirname, 'database.sql');
     if (fs.existsSync(sqlFilePath)) {
@@ -231,8 +236,7 @@ async function initDatabase() {
       `);
     }
 
-    // Clean up legacy tables if exist
-    await connection.query('DROP TABLE IF EXISTS pokja_satu, pokja_dua, pokja_tiga, pokja_empat');
+
 
     // Clean up default records from new tables if exist to force empty state
     await connection.query('TRUNCATE TABLE pokja_1');
@@ -240,6 +244,17 @@ async function initDatabase() {
     await connection.query('TRUNCATE TABLE pokja_3');
     await connection.query('TRUNCATE TABLE pokja_4');
     await connection.query('TRUNCATE TABLE data_umum_pkk');
+    await connection.query('SET FOREIGN_KEY_CHECKS = 0');
+    await connection.query('TRUNCATE TABLE warga');
+    await connection.query('TRUNCATE TABLE keluarga');
+    await connection.query('TRUNCATE TABLE aktivitas_warga');
+    await connection.query('TRUNCATE TABLE buku_ekspedisi');
+    await connection.query('TRUNCATE TABLE buku_anggota_pkk');
+    await connection.query('TRUNCATE TABLE buku_inventaris');
+    await connection.query('TRUNCATE TABLE buku_posyandu');
+    await connection.query('TRUNCATE TABLE buku_keuangan');
+    await connection.query('TRUNCATE TABLE buku_kegiatan');
+    await connection.query('SET FOREIGN_KEY_CHECKS = 1');
 
     console.log('Database & Tabel PKK Nagari Suayan Berhasil Diinisialisasi!');
   } catch (error) {
